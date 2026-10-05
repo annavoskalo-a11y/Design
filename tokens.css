@@ -1,0 +1,241 @@
+/* Водне поло України — generated from tokens.json */
+:root, [data-theme="light"] {
+  --primary-900: #021f40; /* Найтемніший відтінок основного кольору: заголовки на світлому тлі, темні блоки. */
+  --primary-800: #022b5a; /* Натиснутий стан основної кнопки. */
+  --primary-700: #033d7f; /* Основний колір бренду Федерації (#033D7F). */
+  --primary-600: #1b5599; /* Наведення на елементи основного кольору. */
+  --primary-500: #3a72b3; /* Графіки, іконки-акценти, лінки у темних блоках. */
+  --primary-400: #6c98c8; /* Другорядні графічні елементи, діаграми. */
+  --primary-300: #a3bfdd; /* Декоративні лінії та хвилі на синьому тлі. */
+  --primary-200: #cfddee; /* Рамки активних елементів, виділення. */
+  --primary-100: #e3edf8; /* М'який фон вибраних елементів і бейджів. */
+  --accent-500: #ffd957; /* Акцентний колір (#FFD957): головний CTA на синьому тлі, LIVE, м'яч, підсвітка результату. */
+  --accent-600: #f2c42e; /* Наведення на акцентні елементи. */
+  --accent-700: #d9a800; /* Натиснутий стан акценту. */
+  --accent-100: #fff4c9; /* М'який акцентний фон: сповіщення, виділені рядки. */
+  --accent-ink: #3d2f00; /* Текст і іконки на акцентному жовтому (контраст 11:1). */
+  --white: #ffffff; /* Картки, поля введення, текст на синьому. */
+  --gray-50: #f1f5f9; /* Фон неактивних полів, смуги таблиць. */
+  --gray-100: #e6ecf2; /* Розділювачі, тихі рамки. */
+  --gray-200: #d3dbe5; /* Рамки полів і карток. */
+  --gray-300: #b5c0ce; /* Вимкнені рамки, плейсхолдер-ілюстрації. Не для тексту. */
+  --gray-400: #8e9bad; /* Вимкнені іконки. Не для тексту. */
+  --gray-500: #5e6d80; /* Другорядний текст на білому та фоні сторінки (5.3:1). */
+  --gray-600: #4a596b; /* Підписи, метадані, помітний другорядний текст. */
+  --gray-700: #364558; /* Основний текст у щільних списках. */
+  --gray-800: #1f2d3f; /* Основний текст. */
+  --gray-900: #0f1b2a; /* Найтемніший нейтральний: заголовки, максимальний контраст. */
+  --success: #1e7f4f; /* Успіх, перемога, підтверджена реєстрація. */
+  --success-soft: #e0f3e9; /* Фон повідомлень про успіх. */
+  --error: #c42f2a; /* Помилки валідації, скасований матч. */
+  --error-soft: #fbe5e3; /* Фон повідомлень про помилку. */
+  --bg: #f8fcff; /* Фон застосунку (#F8FCFF). */
+  --surface: var(--white); /* Поверхня карток, листів і полів. */
+  --surface-muted: var(--gray-50); /* Вторинна поверхня всередині картки. */
+  --border: var(--gray-200); /* Рамка за замовчуванням. */
+  --divider: var(--gray-100); /* Тонкий розділювач між рядками. */
+  --text: var(--gray-900); /* Основний текст на bg та surface. */
+  --text-muted: var(--gray-600); /* Другорядний текст на bg та surface. */
+  --text-on-primary: var(--white); /* Текст на primary-700 і темніших. */
+  --text-on-accent: var(--accent-ink); /* Текст на accent-500. */
+  --primary: var(--primary-700); /* Семантичний основний колір: кнопки, активні елементи, посилання. */
+  --primary-hover: var(--primary-600); /* Наведення на primary. */
+  --primary-pressed: var(--primary-800); /* Натискання на primary. */
+  --primary-soft: var(--primary-100); /* Фон вибраного, інформаційних повідомлень. */
+  --accent: var(--accent-500); /* Семантичний акцент: CTA, LIVE, виділення. */
+  --focus-ring: var(--primary-700); /* Кільце фокусу, 2px з відступом 2px. */
+  --shadow-sm: 0 1px 2px rgba(2, 31, 64, 0.08); /* Картки у спокої. */
+  --shadow-md: 0 4px 12px rgba(2, 31, 64, 0.10); /* Піднята картка, випадаючі меню. */
+  --shadow-lg: 0 12px 32px rgba(2, 31, 64, 0.16); /* Нижні листи, модальні вікна. */
+}
+:root {
+  --space-1: 4px; /* Між іконкою та текстом. */
+  --space-2: 8px; /* Малий внутрішній відступ, проміжок між бейджами. */
+  --space-3: 12px; /* Відступ у полях і компактних картках. */
+  --space-4: 16px; /* Поля екрана, внутрішній відступ картки. */
+  --space-5: 20px; /* Відстань між елементами форми. */
+  --space-6: 24px; /* Відстань між картками. */
+  --space-8: 32px; /* Відстань між секціями. */
+  --space-10: 40px; /* Великі розриви. */
+  --space-12: 48px; /* Мінімальна висота цільової зони кнопки. */
+  --space-16: 64px; /* Відступи героїчних блоків. */
+  --ios-tap: 44px; /* Мінімальна цільова зона iOS (44×44 pt). */
+  --ios-margin: 16px; /* Бічні поля екрана iPhone. */
+  --radius-sm: 6px; /* Бейджі, чіпи, малі елементи. */
+  --radius-md: 10px; /* Кнопки, поля введення. */
+  --radius-lg: 16px; /* Картки. */
+  --radius-xl: 24px; /* Нижні листи, великі блоки. */
+  --radius-pill: 999px; /* Таби, аватари, статус LIVE. */
+  --radius-ios-group: 12px; /* Згруповані списки (inset grouped), як у системних налаштуваннях. */
+  --font-display: "Montserrat", "Segoe UI", system-ui, sans-serif;
+  --font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-ios: -apple-system, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+  --text-score: 800 48px/48px var(--font-display); /* Рахунок матчу. */
+  --text-display: 800 36px/42px var(--font-display); /* Головні екрани, героїчні блоки. */
+  --text-h1: 700 28px/34px var(--font-display); /* Заголовок екрана. */
+  --text-h2: 700 22px/28px var(--font-display); /* Заголовок секції. */
+  --text-h3: 700 18px/24px var(--font-display); /* Заголовок картки. */
+  --text-body-lg: 400 17px/26px var(--font-sans); /* Лонгрід, новини. */
+  --text-body: 400 15px/22px var(--font-sans); /* Основний текст. */
+  --text-body-sm: 400 13px/18px var(--font-sans); /* Метадані, підписи. */
+  --text-label: 600 14px/18px var(--font-sans); /* Кнопки, поля, таби. */
+  --text-caption: 500 12px/16px var(--font-sans); /* Найменший текст: підписи під іконками. */
+  --text-overline: 700 11px/14px var(--font-sans); /* Малі заголовки секцій, ВЕРХНІМ РЕГІСТРОМ. */
+  --text-ios-large-title: 700 34px/41px var(--font-ios); /* Великий заголовок навігації. */
+  --text-ios-title-1: 700 28px/34px var(--font-ios); /* Заголовок екрана. */
+  --text-ios-title-2: 700 22px/28px var(--font-ios); /* Заголовок секції. */
+  --text-ios-title-3: 600 20px/25px var(--font-ios); /* Заголовок групи. */
+  --text-ios-headline: 600 17px/22px var(--font-ios); /* Заголовки рядків, заголовок navbar. */
+  --text-ios-body: 400 17px/22px var(--font-ios); /* Основний текст iOS. */
+  --text-ios-callout: 400 16px/21px var(--font-ios); /* Вторинний текст. */
+  --text-ios-subhead: 400 15px/20px var(--font-ios); /* Підписи рядків. */
+  --text-ios-footnote: 400 13px/18px var(--font-ios); /* Нотатки під групами. */
+  --text-ios-caption: 400 12px/16px var(--font-ios); /* Підписи табів (11 pt у TabBar). */
+}
+.score {
+  font-family: var(--font-display);
+  font-size: 48px;
+  line-height: 48px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+.display {
+  font-family: var(--font-display);
+  font-size: 36px;
+  line-height: 42px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+.h1 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.h2 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.body-lg {
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 26px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.body-sm {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.label {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.caption {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.overline {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.ios-large-title {
+  font-family: var(--font-ios);
+  font-size: 34px;
+  line-height: 41px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.ios-title-1 {
+  font-family: var(--font-ios);
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.ios-title-2 {
+  font-family: var(--font-ios);
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.ios-title-3 {
+  font-family: var(--font-ios);
+  font-size: 20px;
+  line-height: 25px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.ios-headline {
+  font-family: var(--font-ios);
+  font-size: 17px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.ios-body {
+  font-family: var(--font-ios);
+  font-size: 17px;
+  line-height: 22px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.ios-callout {
+  font-family: var(--font-ios);
+  font-size: 16px;
+  line-height: 21px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.ios-subhead {
+  font-family: var(--font-ios);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.ios-footnote {
+  font-family: var(--font-ios);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.ios-caption {
+  font-family: var(--font-ios);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+}

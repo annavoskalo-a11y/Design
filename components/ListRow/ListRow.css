@@ -1,0 +1,8 @@
+.list-caption{padding:var(--space-4) 32px 6px;font:var(--text-ios-footnote);color:var(--text-muted);text-transform:uppercase}
+.list-group{margin:0 var(--ios-margin);background:var(--surface);border-radius:var(--radius-ios-group);overflow:hidden}
+.list-row{display:flex;align-items:center;gap:var(--space-3);min-height:var(--ios-tap);padding:0 var(--space-4);position:relative;font:var(--text-ios-body);color:var(--text)}
+.list-row+.list-row::before{content:"";position:absolute;top:0;left:var(--space-4);right:0;height:1px;background:var(--divider)}
+.list-row__title{flex:1}
+.list-row__value{color:var(--text-muted)}
+.list-row__chevron{width:14px;height:14px;fill:none;stroke:var(--gray-400);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.list-footer{padding:var(--space-2) 32px;font:var(--text-ios-footnote);color:var(--text-muted)}
