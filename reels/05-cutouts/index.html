@@ -33,11 +33,12 @@ body,#stage{background:var(--ink)}
   <div class="cap" style="top:900px"><div class="big mask"><span id="e1">Swipex</span></div></div>
 </div>
 </div>
-<script src="../vendor/gsap.min.js"></script><script src="../logo.js"></script>
+<script src="../vendor/gsap.min.js"></script><script src="../logo.js"></script><script src="../phone.js"></script>
 <script>
 document.getElementById('lg').innerHTML=logoSVG(210,false);
 const AS={'wp-profile':[370,350],'wp-comp':[370,235],'wp-news':[370,360],'medis-title':[760,130],'medis-price':[380,320],'medis-list':[690,360],'medis-video':[690,410],'vohen-card':[492,160],'vohen-menu':[240,580],'vohen-mobile':[390,844],'vohen-modal':[392,845],'vohen-desktop':[1440,1024]};
-function add(w,o){const el=document.createElement('div');el.className='cut';el.style.cssText=`left:${o.x}px;top:${o.y}px;width:${o.w}px;`;
+function add(w,o){
+  if(o.iph){const e=phoneEl({screen:o.iph,w:o.w});e.style.left=o.x+'px';e.style.top=o.y+'px';e.style.zIndex=o.z||10;e.dataset.rot=o.rot||0;e.style.transform=`rotate(${o.rot||0}deg)`;e.style.filter='drop-shadow(0 40px 50px rgba(11,11,11,.35))';document.getElementById(w).appendChild(e);return e;}const el=document.createElement('div');el.className='cut';el.style.cssText=`left:${o.x}px;top:${o.y}px;width:${o.w}px;`;
   if(o.phone){el.classList.add('phone');const h=o.h;el.style.height=h+'px';el.innerHTML=`<div class="in"><img src="../assets/${o.img}.png" style="width:100%;${o.scroll?'':'height:100%;object-fit:cover'}"></div>`;}
   else if(o.win){el.classList.add('win');el.style.height=o.h+'px';el.innerHTML=`<div class="in"><img src="../assets/${o.img}.png" style="width:100%"></div>`;}
   else{const [iw,ih]=AS[o.img];el.style.height=(o.w*ih/iw)+'px';el.innerHTML=`<img src="../assets/${o.img}.png">`;}
@@ -72,14 +73,14 @@ tl.to('#A .world',{scale:1.9,opacity:0,duration:.4,ease:'power3.in'},A_END-.4);
 
 /* ---------- B: Waterpolo ---------- */
 const TB=3.5,B_END=7.0; show('#B',TB,B_END);
-const bPhone=add('wB',{img:'wp-long',x:300,y:560,w:480,h:1010,phone:1,scroll:1,rot:0,z:20});
+const bPhone=add('wB',{iph:'wp',x:305,y:560,w:470,rot:0,z:20});
 const B=[bPhone,
  add('wB',{img:'wp-profile',x:20,y:610,w:360,rot:-7,z:25}),
  add('wB',{img:'wp-news',x:700,y:720,w:340,rot:6,z:26}),
  add('wB',{img:'wp-comp',x:50,y:1260,w:430,rot:-4,z:27}),
 ];
-const imgB=bPhone.querySelector('img'); const sh=480-26;
-tl.fromTo(imgB,{y:0},{y:-(2402*sh/390-1010+26)*0.62,duration:3.2,ease:'power1.inOut'},TB+.5);
+const imgB=bPhone._scroll.img;
+tl.fromTo(imgB,{y:0},{y:-bPhone._scroll.max*.75,duration:3.2,ease:'power1.inOut'},TB+.5);
 tagIn('#tB',TB+.05);
 enter(B,TB+.1,.12);
 tl.fromTo(bPhone,{rotateY:-14},{rotateY:8,duration:3.4,ease:'sine.inOut'},TB+.1);
@@ -105,9 +106,9 @@ leave(['#C .world','#tC'],C_END-.35);
 /* ---------- D: Вогень ---------- */
 const TD=10.5,D_END=14.0; show('#D',TD,D_END);
 const dDesk=add('wD',{img:'vohen-desktop',x:60,y:640,w:900,h:620,win:1,rot:0,z:18});
-const dMob=add('wD',{img:'vohen-mobile',x:640,y:880,w:330,h:714,phone:1,rot:4,z:26});
+const dMob=add('wD',{iph:'vohen',x:650,y:830,w:330,rot:4,z:26});
 const D=[dDesk,dMob,
- add('wD',{img:'vohen-modal',x:20,y:1020,w:330,rot:-6,z:27,phone:0}),
+ add('wD',{iph:'modal',x:30,y:1000,w:300,rot:-6,z:27}),
  add('wD',{img:'vohen-card',x:600,y:585,w:430,rot:5,z:24}),
 ];
 tagIn('#tD',TD+.05);
