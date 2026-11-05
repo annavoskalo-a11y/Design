@@ -1,0 +1,112 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><title>Reel 4</title>
+<link rel="stylesheet" href="../shared.css">
+<style>
+:root{--paper:#F5F5F5;--ink:#0B0B0B}
+body,#stage{background:var(--paper)}
+.scene{position:absolute;inset:0;visibility:hidden}
+#A{background:var(--paper);color:var(--ink)}
+#B{background:var(--ink);color:#fff}
+#C{background:var(--paper);color:var(--ink)}
+.abs{position:absolute;left:0;right:0;text-align:center}
+.stackrow{position:absolute;left:0;right:0;text-align:center;font-size:262px;line-height:1;letter-spacing:-.04em;text-transform:uppercase;will-change:transform}
+#pend{position:absolute;inset:0;pointer-events:none}
+.stop{font-size:176px;line-height:1;letter-spacing:-.04em;text-align:center;position:absolute;left:0;right:0}
+.mask{overflow:hidden;display:block;padding:.1em 0}.mask>span{display:block}
+.w{position:absolute;left:0;right:0;top:50%;text-align:center;transform:translateY(-54%);font-size:170px;letter-spacing:-.04em;line-height:1;visibility:hidden;padding:0 40px}
+.w.up{text-transform:uppercase}
+.w .g{color:var(--green)}
+#today{position:absolute;left:0;right:0;top:0;height:1920px}
+.tr{position:absolute;left:0;right:0;text-align:center;font-size:150px;line-height:1;letter-spacing:-.035em;text-transform:uppercase}
+.tr .g{color:var(--green)}
+#fol{font-size:124px;letter-spacing:-.04em;text-transform:uppercase;position:absolute;left:0;right:0;top:830px;text-align:center}
+#brandwrap{position:absolute;left:0;right:0;top:640px;display:flex;flex-direction:column;align-items:center}
+#wm{font-size:120px;letter-spacing:-.04em;margin-top:42px}
+#handle{font-size:46px;font-weight:600;color:#6b6b6b;margin-top:20px;letter-spacing:.01em}
+</style></head><body><div id="stage">
+
+<div class="scene" id="A">
+  <div class="stackrow" id="r1" style="top:640px">Ідея</div>
+  <div class="stackrow" id="r2" style="top:880px">Ідея</div>
+  <div class="stackrow" id="r3" style="top:1120px">Ідея</div>
+  <div class="stop" id="s1" style="top:880px;color:var(--green)"><span class="mask"><span id="s1t">Зупинись</span></span></div>
+  <div class="stop" id="s2" style="top:1070px"><span class="mask"><span id="s2t">і глянь</span></span></div>
+  <svg id="pend" width="1080" height="1920" viewBox="0 0 1080 1920"><line id="thr" x1="540" y1="-40" x2="540" y2="0" stroke="#0B0B0B" stroke-width="5"/><circle id="ball" cx="540" cy="0" r="30" fill="#0ABB87"/></svg>
+</div>
+
+<div class="scene" id="B"><div id="words"></div><div id="today"></div></div>
+
+<div class="scene" id="C">
+  <div id="fol">Підписуйся</div>
+  <div id="brandwrap"><div id="lg"></div><div id="wm">Swipex</div><div id="handle">@swipex.ua</div></div>
+</div>
+</div>
+<script src="../vendor/gsap.min.js"></script><script src="../logo.js"></script>
+<script>
+document.getElementById('lg').innerHTML=logoSVG(190,true);
+const tl=gsap.timeline({paused:true,defaults:{ease:'power4.out'}});
+const show=(el,a,b)=>{tl.set(el,{visibility:'visible'},a);if(b!=null)tl.set(el,{visibility:'hidden'},b)};
+
+/* ---------- A: pendulum hits the stack, then "stop scrolling" ---------- */
+show('#A',0,4.9);
+const rows=['#r1','#r2','#r3'], RY=[640+131,880+131,1120+131];
+const P={t:0,L:0,drop:0};
+const T0=.55, SW_END=2.7;
+tl.fromTo(rows,{yPercent:130},{yPercent:0,duration:.8,stagger:.1,ease:'power4.out'},.15);
+tl.to(P,{L:830,duration:.55,ease:'power3.out'},0);
+tl.to(P,{t:SW_END+2.3,duration:SW_END+2.3,ease:'none',onUpdate:draw},0);
+tl.to(P,{drop:1,duration:.8,ease:'power3.inOut',onUpdate:draw},SW_END-.1);
+let prevBx=540;
+function draw(){
+  const t=P.t, e=Math.max(0,t-T0);
+  const th=t<T0?0.62:0.62*Math.exp(-.55*e)*Math.cos(3.05*e);
+  const w=t<T0?0:(0.62*Math.exp(-.55*e)*(-3.05)*Math.sin(3.05*e)); // angular velocity
+  const L=P.L*(1-P.drop*.22), px=540, py=-40;
+  const bx=px+L*Math.sin(th*(1-P.drop)), by=py+L*Math.cos(th*(1-P.drop));
+  document.getElementById('thr').setAttribute('x2',bx);document.getElementById('thr').setAttribute('y2',by);
+  const b=document.getElementById('ball');b.setAttribute('cx',bx);b.setAttribute('cy',by);
+  rows.forEach((r,i)=>{ if(P.drop>0.05) return;
+    const near=Math.exp(-Math.pow((by-RY[i])/150,2));
+    const vx=L*w*Math.cos(th);
+    const dx=Math.max(-90,Math.min(90,vx*.11))*near;
+    document.querySelector(r).style.transform=`translateX(${dx}px) skewX(${-dx*.18}deg)`;
+  });
+}
+// rows leave, text arrives
+tl.to(rows,{yPercent:-800,duration:.5,stagger:.06,ease:'power3.in'},SW_END+.1);
+tl.fromTo('#s1t',{yPercent:120},{yPercent:0,duration:.65},SW_END+.75);
+tl.fromTo('#s2t',{yPercent:120},{yPercent:0,duration:.65},SW_END+.9);
+tl.to('#ball',{attr:{r:36},duration:.25,yoyo:true,repeat:1,ease:'sine.inOut'},SW_END+1.0);
+tl.set('#s1,#s2',{opacity:0},0).set('#s1,#s2',{opacity:1},SW_END+.7);
+
+/* ---------- B: hard-cut words on black ---------- */
+const B0=4.9;
+show('#B',B0,12.15);
+const seq=[['Ми',.35],['робимо',.45],['сайти',.45],['та',.3],['застосунки',.55],['що',.3],['приносять',.55],['<span class="g">результат</span>',.9],
+ ['вже зробили',.8,1],['Waterpolo',.55],['FuturaHub',.55],['CashBank',.55],['Quinset',.55]];
+const W=document.getElementById('words');let t=B0+.05;
+seq.forEach(([h,d,up],i)=>{const el=document.createElement('div');el.className='w'+(up?' up':'');if(i>=9||i==8)el.style.textTransform=i==8?'uppercase':'none';el.innerHTML=h;
+  if(h==='Waterpolo'||h==='FuturaHub'||h==='CashBank'||h==='Quinset'){el.style.textTransform='uppercase';}
+  const plain=h.replace(/<[^>]+>/g,'');const n=plain.length;el.style.fontSize=(n<=3?300:n<=6?250:n<=9?190:150)+'px';if(plain==='вже зробили')el.style.fontSize='170px';if(['Waterpolo','FuturaHub','CashBank','Quinset'].includes(plain))el.style.fontSize='168px';W.appendChild(el);show(el,t,t+d);
+  tl.fromTo(el,{scale:.9,y:14},{scale:1,y:0,duration:.18,ease:'power3.out'},t);t+=d;});
+// stack "СЬОГОДНІ" with a green О
+const TD=document.getElementById('today');
+const TS=t+.05; // ~11.0
+const nRows=7, rh=150;
+for(let i=0;i<nRows;i++){const d=document.createElement('div');d.className='tr';d.innerHTML='Сь<span class="g">о</span>годні';d.style.top=(960-rh/2+(i-(nRows-1)/2)*rh*1.12)+'px';d.style.visibility='hidden';TD.appendChild(d);
+  const order=[3,2,4,1,5,0,6][i];tl.set(d,{visibility:'visible'},TS+order*.11);
+  tl.fromTo(d,{scale:.94},{scale:1,duration:.2},TS+order*.11);}
+tl.fromTo('#today',{scale:1},{scale:1.7,duration:.9,ease:'power2.in'},TS+.55);
+
+/* ---------- C: follow -> logo ---------- */
+const C0=12.15;
+show('#C',C0);
+tl.fromTo('#fol',{filter:'blur(40px)',opacity:0,y:30},{filter:'blur(0px)',opacity:1,y:0,duration:.8,ease:'power2.out'},C0+.05);
+tl.to('#fol',{filter:'blur(30px)',opacity:0,duration:.3,ease:'power2.in'},C0+1.35);
+tl.fromTo('#lg svg',{scale:.3,rotate:-25,opacity:0},{scale:1,rotate:0,opacity:1,duration:.8,ease:'back.out(1.8)'},C0+1.5);
+tl.fromTo('#wm',{opacity:0,y:30},{opacity:1,y:0,duration:.6},C0+1.85);
+tl.fromTo('#handle',{opacity:0,y:20},{opacity:1,y:0,duration:.6},C0+2.1);
+tl.set('#fol',{visibility:'visible'},C0);
+tl.to({},{duration:.01},C0+3.6);
+draw();
+window.TL=tl;
+</script></body></html>
