@@ -61,7 +61,8 @@ const markGreen=(h)=>{const w=h*65/61;return `<svg width="${w}" height="${h}" vi
 function mkCard(spec){
  const el=document.createElement('div');el.className='card';let w,h;
  switch(spec.t){
-  case 'portrait':{w=420;h=520;el.className+=' dark';el.innerHTML=`<img class="fit" src="../assets/${spec.img}.png">`;break;}
+  case 'obj':{w=420;h=520;const bgs={bulb:'linear-gradient(160deg,#ececec,#b9b9b9)',qmark:'linear-gradient(160deg,#d6f3e8,#86cdb2)',arrow:'linear-gradient(160deg,#1d1d1d,#0b0b0b)'};el.style.background=bgs[spec.img];el.innerHTML=`<img src="../assets/${spec.img}.png" style="position:absolute;left:14%;top:12%;width:72%;filter:drop-shadow(0 26px 26px rgba(0,0,0,.28))">`;break;}
+  case 'crop':{const NSZ={'wp-comp':[370,235],'wp-news':[370,360],'wp-profile':[370,350],'medis-price':[380,320],'medis-list':[690,360],'vohen-card':[492,160],'vohen-menu':[240,580],'medis-title':[760,130]};const [iw,ih]=NSZ[spec.img];w=380;h=380*ih/iw;el.className+=' white';el.style.borderRadius='14px';el.innerHTML=`<img src="../assets/${spec.img}.png" style="width:100%">`;break;}
   case 'icon':{w=420;h=470;el.className+=' dark icon';el.innerHTML=iconSVG(spec.k);break;}
   case 'leaf':{w=400;h=500;el.className+=' leaf';el.innerHTML=`<div class="blob"></div><div class="pill" style="top:44%;font-size:30px"><i style="width:40px;height:40px"></i>Web</div><div class="pill" style="top:57%;font-size:30px"><i style="width:40px;height:40px"></i>Mobile</div>`;break;}
   case 'poster':{w=400;h=500;el.className+=' poster';el.innerHTML=`<div class="in"><div class="t" style="font-size:25px">Задумай ідею.<br>Ми зробимо продукт.</div><img class="b" src="../assets/bulb.png"><div class="f" style="font-size:19px">${markGreen(18)}Swipex</div></div>`;break;}
@@ -74,8 +75,8 @@ function mkCard(spec){
  el.style.width=w+'px';el.style.height=h+'px';return {el,w,h,spec};}
 
 /* ---------- heroes on an ellipse (camera visits them in order, then loops) ---------- */
-const HEROES=[{t:'portrait',img:'team-a'},{t:'portrait',img:'team-b'},{t:'icon',k:'ring'},{t:'icon',k:'x'},{t:'icon',k:'person'},{t:'phone',screen:'wp'},{t:'poster'},{t:'sign'},{t:'win'},{t:'book'},{t:'tile'}];
-const HOLD=[.36,.46,.24,.24,.26,.44,.44,.44,.36,.36,.7], TR=.24;
+const HEROES=[{t:'obj',img:'bulb'},{t:'obj',img:'qmark'},{t:'icon',k:'ring'},{t:'icon',k:'x'},{t:'icon',k:'person'},{t:'leaf'},{t:'poster'},{t:'sign'},{t:'book'},{t:'tile'}];
+const HOLD=[.25,.5,.16,.3,.22,.5,.55,.55,.42,.62], TR=.22;
 const NH=HEROES.length, heroes=[];
 HEROES.forEach((sp,k)=>{const c=mkCard(sp);const th=-Math.PI/2+k*2*Math.PI/NH;const x=900*Math.cos(th),y=1300*Math.sin(th);
   const rY=(k%2?-1:1)*rr(3,7), rX=rr(-4,4), rZ=rr(-3,3);
@@ -84,13 +85,13 @@ HEROES.forEach((sp,k)=>{const c=mkCard(sp);const th=-Math.PI/2+k*2*Math.PI/NH;co
   gsap.set(c.el,{z:0,rotationY:rY*1.4,rotationX:rX*1.2,rotationZ:rZ});heroes.push(c);});
 
 /* ---------- filler cards ---------- */
-const FILL=[{w:3.2,f:()=>({t:'portrait',img:pick(['team-a','team-b','team-c','team-d'])})},{w:2,f:()=>({t:'tile'})},{w:2.2,f:()=>({t:'icon',k:pick(Object.keys(ICON))})},
- {w:1.4,f:()=>({t:'sign'})},{w:1.2,f:()=>({t:'leaf'})},{w:1,f:()=>({t:'poster'})},{w:.9,f:()=>({t:'book'})},{w:.7,f:()=>({t:'win'})}];
+const FILL=[{w:2.4,f:()=>({t:'obj',img:pick(['bulb','qmark','arrow'])})},{w:2.6,f:()=>({t:'crop',img:pick(['wp-comp','wp-news','wp-profile','medis-price','medis-list','vohen-card','vohen-menu','medis-title'])})},{w:2,f:()=>({t:'tile'})},{w:2.2,f:()=>({t:'icon',k:pick(Object.keys(ICON))})},
+ {w:1.4,f:()=>({t:'sign'})},{w:1.2,f:()=>({t:'leaf'})},{w:1,f:()=>({t:'poster'})},{w:.9,f:()=>({t:'book'})},{w:.6,f:()=>({t:'win'})},{w:.5,f:()=>({t:'phone',screen:pick(['wp','vohen','modal'])})}];
 const tot=FILL.reduce((a,b)=>a+b.w,0);
 function pickFill(){let r=R()*tot;for(const f of FILL){if((r-=f.w)<=0)return f.f();}return FILL[0].f();}
-const NF=125;let placed=0,guard=0;
+const NF=100;let placed=0,guard=0;
 while(placed<NF&&guard++<5000){
- const c=mkCard(pickFill());const sc=rr(.2,.46)*(c.spec.t==='win'?.8:1);
+ const c=mkCard(pickFill());const sc=rr(.18,.42)*(c.spec.t==='win'?.8:1)*(c.spec.t==='phone'?1.15:1);
  const fw=c.w*sc, fh=c.h*sc; const z=rr(-950,150);
  const a=R()*Math.PI*2, rad=Math.sqrt(R()), x=rad*1500*Math.cos(a)*(R()<.5?1:1), y=rad*2100*Math.sin(a);
  if(z>-120){let bad=false;for(const h of heroes){const hr=.62*Math.max(h.w,h.h)+80;const d=Math.hypot(x-h.x,y-h.y);if(d<hr+.5*Math.max(fw,fh)){bad=true;break;}}if(bad)continue;}
@@ -117,7 +118,7 @@ const first=heroes[0];const f0=state(first);
 gsap.set(CAM,{x:f0.x,y:f0.y,z:f0.z});gsap.set(ROT,{rotationY:first.rot.ry,rotationX:first.rot.rx,rotationZ:first.rot.rz});
 let prev=null;const startT=[];
 seq.forEach((e,i)=>{
- const h=heroes[e.k], hold=HOLD[e.k]*(1), a=state(h,0), b=state(h,.06);
+ const h=heroes[e.k], hold=HOLD[e.k]+(e.act===1&&e.k===0?.55:0), a=state(h,0), b=state(h,.06);
  if(prev){ // travel from prev to this hero
    const pb=state(prev,.06), mid=Math.min(pb.z,a.z)-170;
    tl.to(CAM,{x:a.x,y:a.y,duration:TR,ease:'power2.inOut'},t);
