@@ -38,6 +38,7 @@ body,#stage{background:var(--paper)}
 </style></head><body><div id="stage"><div id="scene"><div id="rot"><div id="cam"></div></div></div><div id="name">Swipex</div></div>
 <script src="../vendor/gsap.min.js"></script><script src="../logo.js"></script><script src="../phone.js"></script>
 <script>
+window.COMPSZ={'wp-comp':[370,235],'wp-profile':[370,350],'comp/wp1':[370,180],'comp/wp11':[370,170],'medis-price':[380,320],'medis-list':[690,360],'medis-title':[760,130],'comp/md7':[700,360],'vohen-card':[492,160],'vohen-menu':[240,580],'comp/vh7':[1440,200],'comp/vm0':[390,130],'comp/vm2':[390,170],'comp/vm3':[390,180],'comp/mm0':[392,330]};
 const P=1500, CAM=document.getElementById('cam'), ROT=document.getElementById('rot'), SC=document.getElementById('scene');
 let seed=5;const R=()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
 const rr=(a,b)=>a+R()*(b-a), pick=a=>a[Math.floor(R()*a.length)];
@@ -63,7 +64,7 @@ function mkCard(spec){
  switch(spec.t){
   case 'o3':{const SZ={logo3d:[521,527],padlock:[433,535],unlock:[432,535],spring:[422,416],bulb:[699,808],qmark:[745,833],arrow:[613,703]};const [iw,ih]=(()=>{const im=SZ[spec.img];return im})();w=spec.w||430;h=w*ih/iw;el.style.overflow='visible';el.style.borderRadius='0';el.style.background='none';el.innerHTML=`<img src="../assets/${spec.img}.png" style="width:100%;height:100%;display:block;filter:drop-shadow(0 30px 34px rgba(11,11,11,.3))">`;break;}
   case 'obj':{w=420;h=520;const bgs={bulb:'linear-gradient(160deg,#ececec,#b9b9b9)',qmark:'linear-gradient(160deg,#d6f3e8,#86cdb2)',arrow:'linear-gradient(160deg,#1d1d1d,#0b0b0b)'};el.style.background=bgs[spec.img];el.innerHTML=`<img src="../assets/${spec.img}.png" style="position:absolute;left:14%;top:12%;width:72%;filter:drop-shadow(0 26px 26px rgba(0,0,0,.28))">`;break;}
-  case 'crop':{const NSZ={'wp-comp':[370,235],'wp-news':[370,360],'wp-profile':[370,350],'medis-price':[380,320],'medis-list':[690,360],'vohen-card':[492,160],'vohen-menu':[240,580],'medis-title':[760,130]};const [iw,ih]=NSZ[spec.img];w=380;h=380*ih/iw;el.className+=' white';el.style.borderRadius='14px';el.innerHTML=`<img src="../assets/${spec.img}.png" style="width:100%">`;break;}
+  case 'crop':{const NSZ=window.COMPSZ;const [iw,ih]=NSZ[spec.img];w=ih/iw>1.2?300:(spec.w||460);h=w*ih/iw;el.className+=' white';el.style.borderRadius='16px';el.style.boxShadow='0 0 0 2px rgba(120,120,120,.25)';el.innerHTML=`<img src="../assets/${spec.img}.png" style="width:100%;display:block">`;break;}
   case 'icon':{w=420;h=470;el.className+=' dark icon';el.innerHTML=iconSVG(spec.k);break;}
   case 'leaf':{w=400;h=500;el.className+=' leaf';el.innerHTML=`<div class="blob"></div><div class="pill" style="top:44%;font-size:30px"><i style="width:40px;height:40px"></i>Web</div><div class="pill" style="top:57%;font-size:30px"><i style="width:40px;height:40px"></i>Mobile</div>`;break;}
   case 'poster':{w=400;h=500;el.className+=' poster';el.innerHTML=`<div class="in"><div class="t" style="font-size:25px">Задумай ідею.<br>Ми зробимо продукт.</div><img class="b" src="../assets/bulb.png"><div class="f" style="font-size:19px">${markGreen(18)}Swipex</div></div>`;break;}
@@ -76,8 +77,8 @@ function mkCard(spec){
  el.style.width=w+'px';el.style.height=h+'px';return {el,w,h,spec};}
 
 /* ---------- heroes on an ellipse (camera visits them in order, then loops) ---------- */
-const HEROES=[{t:'o3',img:'logo3d',w:470},{t:'o3',img:'bulb',w:420},{t:'icon',k:'ring'},{t:'icon',k:'x'},{t:'icon',k:'person'},{t:'o3',img:'padlock',w:400},{t:'leaf'},{t:'poster'},{t:'o3',img:'spring',w:470},{t:'sign'},{t:'o3',img:'unlock',w:400},{t:'tile'}];
-const HOLD=[.35,.45,.18,.3,.22,.5,.45,.5,.4,.5,.45,.62], TR=.34;
+const C=n=>({t:'crop',img:n});const HEROES=[C('wp-comp'),C('vohen-card'),C('medis-price'),{t:'phone',screen:'wp'},C('medis-list'),C('comp/vm2'),C('wp-profile'),C('medis-title'),{t:'phone',screen:'vohen'},C('comp/md7'),C('vohen-menu'),C('comp/mm0'),{t:'win',img:'medis-top'},{t:'tile'}];
+const HOLD=Array.from({length:14},(_,k)=>[.4,.45,.3,.5,.4,.3,.45,.4,.5,.35,.4,.45,.5,.7][k]), TR=.34;
 const NH=HEROES.length, heroes=[];
 HEROES.forEach((sp,k)=>{const c=mkCard(sp);const th=-Math.PI/2+k*2*Math.PI/NH;const x=1000*Math.cos(th),y=1500*Math.sin(th);
   const rY=(k%2?-1:1)*rr(3,7), rX=rr(-4,4), rZ=rr(-3,3);
@@ -86,12 +87,13 @@ HEROES.forEach((sp,k)=>{const c=mkCard(sp);const th=-Math.PI/2+k*2*Math.PI/NH;co
   gsap.set(c.el,{z:0,rotationY:rY*1.4,rotationX:rX*1.2,rotationZ:rZ});heroes.push(c);});
 
 /* ---------- filler cards ---------- */
-const FILL=[{w:4,f:()=>({t:'o3',img:pick(['logo3d','bulb','qmark','arrow','padlock','unlock','spring']),w:rr(260,380)})},{w:2.4,f:()=>({t:'icon',k:pick(Object.keys(ICON))})},{w:2,f:()=>({t:'tile'})},{w:1.2,f:()=>({t:'sign'})},{w:1,f:()=>({t:'leaf'})},{w:.9,f:()=>({t:'poster'})},{w:.9,f:()=>({t:'crop',img:pick(['wp-comp','medis-price','vohen-card','wp-news'])})}];
+const ALLC=Object.keys(window.COMPSZ);
+const FILL=[{w:8,f:()=>({t:'crop',img:pick(ALLC)})},{w:1.6,f:()=>({t:'phone',screen:pick(['wp','vohen','modal'])})},{w:1,f:()=>({t:'win',img:pick(['medis-top','vohen-desktop'])})}];
 const tot=FILL.reduce((a,b)=>a+b.w,0);
 function pickFill(){let r=R()*tot;for(const f of FILL){if((r-=f.w)<=0)return f.f();}return FILL[0].f();}
-const NF=58;let placed=0,guard=0;
+const NF=64;let placed=0,guard=0;
 while(placed<NF&&guard++<5000){
- const c=mkCard(pickFill());const sc=rr(.22,.5)*(c.spec.t==='win'?.8:1)*(c.spec.t==='phone'?1.15:1);
+ const c=mkCard(pickFill());const sc=rr(.3,.55)*(c.spec.t==='win'?.8:1)*(c.spec.t==='phone'?1.15:1);
  const fw=c.w*sc, fh=c.h*sc; const z=rr(-950,150);
  const a=R()*Math.PI*2, rad=.25+.75*Math.sqrt(R()), x=rad*1300*Math.cos(a), y=rad*2000*Math.sin(a);
  if(z>-120){let bad=false;for(const h of heroes){const hr=.62*Math.max(h.w,h.h)+80;const d=Math.hypot(x-h.x,y-h.y);if(d<hr+.5*Math.max(fw,fh)){bad=true;break;}}if(bad)continue;}
