@@ -1,0 +1,73 @@
+<!doctype html><meta charset="utf-8">
+<style>
+/* Кольори бренду Swipex. Шрифт — тимчасовий (Inter), справжній шрифт бренду не надано. */
+:root{--accent:#0ABB87;--dark:#1E1E2D;--light:#F5F5F5;--font:'Inter Display','Inter',sans-serif}
+*{margin:0;box-sizing:border-box}
+body{width:1080px;height:1920px;overflow:hidden;font-family:var(--font);background:var(--light);position:relative;color:var(--dark)}
+.ln{display:block;overflow:hidden;padding:.14em .12em;margin:-.14em -.12em;line-height:1;white-space:nowrap}
+.ch{display:inline-block}
+#bar{position:absolute;left:100px;right:100px;top:250px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:30px;letter-spacing:.2px;opacity:.7}
+#bar .l{display:flex;align-items:center;gap:14px}
+#title{position:absolute;left:100px;top:350px;font-weight:800;font-size:128px;letter-spacing:-4px;color:var(--dark)}
+#cv{position:absolute;left:140px;top:640px}
+#foot{position:absolute;left:100px;right:100px;top:1500px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:28px;opacity:.7}
+</style>
+<div id="bar"><div class="l"><svg width="44" viewBox="0 0 65 61" fill="none"><path d="M63.3284 10.5327C65.5298 12.6545 65.5706 16.1122 63.3691 18.2339L54.074 27.271C51.8725 29.3928 48.2849 29.4321 46.0834 27.3103L36.7067 18.3518C36.7067 18.3518 36.666 18.3518 36.666 18.3125C34.1383 16.1907 30.8361 16.23 28.3085 18.3911L19.0541 27.3889C16.8526 29.5107 13.265 29.5499 11.0635 27.4282L1.68682 18.4697C-0.555432 16.3479 -0.555432 12.8902 1.64605 10.7685L11.0377 1.59131C13.2392 -0.530441 16.5628 -0.530436 18.805 1.59132L28.3492 10.6506C31.0807 12.9295 33.323 13.0867 36.7067 10.6506L46.0019 1.6135C48.2034 -0.508252 51.791 -0.547544 54.0332 1.57421L63.3284 10.5327Z" fill="#1E1E2D"/><path d="M61.4208 50.3074L52.4204 59.3822C50.2887 61.5128 46.8148 61.5522 44.6831 59.4216L35.6037 50.4258C33.472 48.2952 33.472 44.8231 35.5643 42.6926L44.5647 33.6178C46.6964 31.4872 50.1703 31.4478 52.302 33.5784L61.3814 42.5742C63.513 44.6653 63.5525 48.1769 61.4208 50.3074Z" fill="#0ABB87"/></svg><span id="h1">@swipex.ua</span></div><span id="h2">#дизайн</span></div>
+<div id="title"></div>
+<canvas id="cv" width="800" height="800"></canvas>
+<div id="foot"><span>swipex.ua</span><svg id="arr" width="56" height="28" viewBox="0 0 56 28" fill="none" stroke="#1E1E2D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14H52M40 3L52 14L40 25"/></svg></div>
+<script>
+const $=id=>document.getElementById(id);
+const clamp=x=>Math.min(1,Math.max(0,x)),expo=x=>{x=clamp(x);return x>=1?1:1-Math.pow(2,-10*x)},eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const lerp=(a,b,x)=>a+(b-a)*x;
+function mk(root,lines){root.innerHTML='';return lines.map(txt=>{const ln=document.createElement('div');ln.className='ln';[...txt].forEach(c=>{const s=document.createElement('span');s.className='ch';s.textContent=c==' '?' ':c;ln.appendChild(s)});root.appendChild(ln);return ln})}
+function chars(ln,tin,t,dur=.7,stag=.035){[...ln.children].forEach((c,i)=>{const p=expo((t-tin-i*stag)/dur);c.style.transform='translateY('+((1-p)*118)+'%)'})}
+const TL=mk($('title'),['Рідке скло','у русі']);
+// ---- сцена: плями ----
+const N=28,S=document.createElement('canvas');S.width=S.height=800;const sc=S.getContext('2d');
+const rnd=(()=>{let s=7;return()=>(s=(s*16807)%2147483647)/2147483647})();
+const SCAT=[...Array(N)].map(()=>[90+rnd()*620,90+rnd()*620]);
+function ring(rx,ry,rot,ph=0){return [...Array(N)].map((_,i)=>{const a=i/N*Math.PI*2+ph,x=Math.cos(a)*rx,y=Math.sin(a)*ry;return[400+x*Math.cos(rot)-y*Math.sin(rot),400+x*Math.sin(rot)+y*Math.cos(rot)]})}
+function cross(){return [...Array(N)].map((_,i)=>{const k=i%2,u=((i>>1)/(N/2)-.5)*620;return k?[400+u,400+Math.sin(i)*14]:[400+Math.cos(i)*14,400+u]})}
+function pattern(){const o=[];for(let r=0;r<5;r++)for(let c=0;c<6;c++){if(o.length<N)o.push([100+c*120+(r%2)*60,110+r*145])}return o}
+const KEYS=[
+ [0.0,ring(250,250,0)],[2.0,ring(250,250,0)],
+ [3.0,ring(300,190,0.3)],[4.2,ring(340,60,Math.PI/4)],
+ [5.4,cross()],[6.6,SCAT],[8.0,pattern()],[9.9,pattern()]];
+function layout(t){let i=0;while(i<KEYS.length-2&&t>=KEYS[i+1][0])i++;const[a,A]=KEYS[i],[b,B]=KEYS[i+1];const k=eio((t-a)/(b-a));return A.map((p,j)=>[lerp(p[0],B[j][0],k),lerp(p[1],B[j][1],k)])}
+function scene(t){
+ sc.filter='none';sc.globalAlpha=1;sc.fillStyle='#F5F5F5';sc.fillRect(0,0,800,800);
+ const P=layout(t);
+ const pulse=(1+0.08*Math.sin(t*2.2))*(1-0.42*eio((t-6.4)/1.6));
+ const layers=[[130,'rgba(30,30,45,.78)',26],[88,'rgba(10,187,135,1)',16],[46,'rgba(190,247,228,1)',12]];
+ for(const[r,col,bl]of layers){sc.filter='blur('+bl+'px)';sc.fillStyle=col;
+  P.forEach((p,i)=>{const d=Math.sin(t*1.3+i)*10,e=Math.cos(t*1.1+i*1.7)*10;sc.beginPath();sc.arc(p[0]+d,p[1]+e,r*pulse,0,7);sc.fill()})}
+ sc.filter='none'}
+const cv=$('cv'),g=cv.getContext('2d');
+const G=8,TS=100;
+function glass(t){
+ g.clearRect(0,0,800,800);scene(t);
+ g.save();g.beginPath();g.roundRect(0,0,800,800,30);g.clip();
+ g.globalAlpha=.55*expo((t-0.2)/0.8);g.filter='blur(24px)';g.drawImage(S,0,0);g.filter='none';g.globalAlpha=1;
+ for(let j=0;j<G;j++)for(let i=0;i<G;i++){
+  const cx=i*TS+TS/2,cy=j*TS+TS/2,d=Math.hypot(cx-400,cy-400)/560;
+  const p=expo((t-0.15-d*0.55)/0.7);if(p<=0)continue;
+  const mag=1.3+0.04*Math.sin(t*1.6+i+j),sw=TS/mag;
+  const sx=cx+(cx-400)*0.07-sw/2,sy=cy+(cy-400)*0.07-sw/2;
+  const x=cx-TS/2*p+3*p,y=cy-TS/2*p+3*p,s=(TS-6)*p;
+  g.save();g.globalAlpha=p;
+  g.shadowColor='rgba(30,30,45,.14)';g.shadowBlur=22;g.shadowOffsetY=8;g.fillStyle='rgba(255,255,255,.01)';g.beginPath();g.roundRect(x,y,s,s,22*p);g.fill();g.shadowColor='transparent';
+  g.clip();g.beginPath();g.roundRect(x,y,s,s,22*p);g.clip();
+  g.filter='blur(2.5px)';g.drawImage(S,sx,sy,sw,sw,x-4,y-4,s+8,s+8);g.filter='none';
+  g.fillStyle='rgba(255,255,255,.14)';g.fillRect(x,y,s,s);
+  const gr=g.createLinearGradient(x,y,x+s,y+s);gr.addColorStop(0,'rgba(255,255,255,.55)');gr.addColorStop(.35,'rgba(255,255,255,0)');gr.addColorStop(1,'rgba(30,30,45,.10)');g.fillStyle=gr;g.fillRect(x,y,s,s);
+  g.restore();
+  g.save();g.globalAlpha=p;g.lineWidth=2;const e=g.createLinearGradient(x,y,x+s,y+s);e.addColorStop(0,'rgba(255,255,255,.95)');e.addColorStop(.5,'rgba(255,255,255,.25)');e.addColorStop(1,'rgba(30,30,45,.12)');g.strokeStyle=e;g.beginPath();g.roundRect(x+1,y+1,s-2,s-2,21*p);g.stroke();g.restore()}
+ g.restore()}
+function render(T){
+ glass(T);
+ chars(TL[0],0.25,T);chars(TL[1],0.4,T);
+ $('bar').style.opacity=.7*expo((T-0.1)/0.6);$('foot').style.opacity=.7*expo((T-0.5)/0.6);
+ const n=((T-1)%3)/3;$('arr').style.transform='translateX('+(n>0&&n<.35?Math.sin(n/.35*Math.PI)*14:0)+'px)'}
+render(0);
+</script>
