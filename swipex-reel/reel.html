@@ -1,7 +1,7 @@
 <!doctype html><meta charset="utf-8">
 <style>
 /* ===== ПЛЕЙСХОЛДЕРИ БРЕНДУ — замінити на реальні кольори/шрифт/лого SwipeX ===== */
-:root{--accent:#3D5AFE;--dark:#0B0B0F;--light:#fff;--font:'Inter Display','Inter',sans-serif}
+:root{--accent:#14B85A;--dark:#0B0B0F;--light:#fff;--font:'Inter Display','Inter',sans-serif}
 *{margin:0;box-sizing:border-box}
 body{width:1080px;height:1920px;overflow:hidden;background:var(--accent);font-family:var(--font);font-weight:900}
 #bg{position:absolute;inset:0}
@@ -14,28 +14,28 @@ body{width:1080px;height:1920px;overflow:hidden;background:var(--accent);font-fa
 </style>
 <div id="bg"></div><div id="line"></div><div id="dot"></div>
 <div id="t1" class="c" style="top:700px;font-size:260px;color:#fff"></div>
-<div id="t2" class="c" style="top:760px;font-size:210px;color:var(--dark);letter-spacing:-8px"></div>
-<div id="w" class="c" style="top:850px;font-size:230px;color:#fff;letter-spacing:-6px"></div>
+<div id="t2" class="c" style="top:760px;font-size:190px;color:var(--dark);letter-spacing:-6px"></div>
+<div id="w" class="c" style="top:850px;font-size:190px;color:#fff;letter-spacing:-6px"></div>
 <div id="stack"></div>
 <div id="f" class="c" style="top:880px;font-size:140px;color:var(--dark);letter-spacing:-4px"></div>
 <div id="logo" class="c" style="top:760px;font-size:210px;color:var(--dark);letter-spacing:-8px">SwipeX</div>
 <div id="sub" class="c" style="top:1030px;font-size:54px;font-weight:700;color:var(--dark)">дизайн · розробка · ШІ</div>
 <script>
 const $=id=>document.getElementById(id);
-const words=["давай","разом","зробимо","твій","продукт"];
+const words=["дизайн","розробка","ШІ","це вже","продукт"];
 const st=$('stack');for(let i=0;i<9;i++){const d=document.createElement('div');d.innerHTML='ПР<span class="o">О</span>ДУКТ';st.appendChild(d)}
 const ease=x=>1-Math.pow(1-Math.min(1,Math.max(0,x)),3);
 function render(t){
  let bg='var(--accent)',dark=false;
  const show={t1:0,t2:0,w:0,stack:0,f:0,logo:0,sub:0,line:0,dot:0};
- // 0–1.2 ЕЙ x3
+ // 0–1.2 ІДЕЯ x3
  if(t<1.2){show.t1=1;show.line=1;show.dot=1;
   const g=t<0.25&&Math.floor(t*40)%2==0;
-  $('t1').innerHTML=g?'<div style="clip-path:inset(0 0 55% 0)">ЕЙ</div><div>ЕЙ</div><div>ЕЙ</div>':'ЕЙ<br>ЕЙ<br>ЕЙ';
+  $('t1').innerHTML=g?'<div style="clip-path:inset(0 0 55% 0)">ІДЕЯ</div><div>ІДЕЯ</div><div>ІДЕЯ</div>':'ІДЕЯ<br>ІДЕЯ<br>ІДЕЯ';
   $('t1').style.top='560px';
   setDot(540,560+ease(t/0.5)*180)}
  else if(t<2.8){show.t2=1;show.line=1;show.dot=1;
-  $('t2').innerHTML='<span style="color:#fff">стоп</span><br>скролінг';
+  $('t2').innerHTML='<span style="color:#fff">це ще</span><br>не продукт';
   $('t2').style.top='760px';$('t2').style.transform='scale('+(0.9+0.1*ease((t-1.2)/0.25))+')';
   setDot(540,740+Math.sin(t*5)*6)}
  else if(t<5.05){bg='var(--dark)';show.w=1;const i=Math.min(4,Math.floor((t-2.8)/0.45));
@@ -51,11 +51,9 @@ function render(t){
   st.style.top=(960-75-4*150-ease(k)*1500)+'px';st.style.filter='blur('+(Math.sin(k*Math.PI)*28)+'px)';st.style.transform='none';
   bg=k>0.5?'var(--accent)':'var(--dark)';
   document.querySelectorAll('#stack .o').forEach(o=>o.style.color='#fff')}
- else if(t<7.7){show.f=1;$('f').textContent='ПІДПИШИСЬ';const k=(t-7.1)/0.6;
-  $('f').style.filter='blur('+(8*(1-ease(k*2)))+'px)';$('f').style.transform='translateY('+((1-ease(k*1.5))*80)+'px)'}
- else{show.logo=1;show.sub=1;const k=ease((t-7.7)/0.5);
+ else{bg='var(--accent)';show.logo=1;show.sub=1;const k=ease((t-7.1)/0.5);
   $('logo').style.transform='scale('+(0.6+0.4*k)+')';$('logo').style.opacity=k;
-  $('sub').style.opacity=ease((t-8.0)/0.4)}
+  $('sub').style.opacity=ease((t-7.5)/0.4)}
  $('bg').style.background=bg;const dk=bg=='var(--dark)';$('dot').style.background=$('line').style.background=dk?'#fff':'var(--dark)';
  for(const [id,e] of [['t1','t1'],['t2','t2'],['w','w'],['f','f'],['logo','logo'],['sub','sub'],['stack','stack'],['line','line'],['dot','dot']])$(id).style.display=show[e]?'block':'none';
  if(!show.f){$('f').style.filter='none'} if(t<6.6||t>=7.1)st.style.filter='none';
