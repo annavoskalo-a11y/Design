@@ -1,5 +1,6 @@
 const {chromium}=require('playwright');const fs=require('fs');
-(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1080,height:1920}});
-await p.goto('file://'+__dirname+'/reel.html');fs.mkdirSync(process.argv[2],{recursive:true});
-const N=340;for(let i=0;i<N;i++){await p.evaluate(t=>render(t),i/30);await p.screenshot({path:`${process.argv[2]}/f${String(i).padStart(4,'0')}.png`});}
+(async()=>{const out=process.argv[2],FPS=120,N=Math.round(11.34*FPS),W=4;fs.mkdirSync(out,{recursive:true});
+const b=await chromium.launch();
+await Promise.all([...Array(W).keys()].map(async w=>{const p=await b.newPage({viewport:{width:1080,height:1920}});await p.goto('file://'+__dirname+'/reel.html');
+ for(let i=w;i<N;i+=W){await p.evaluate(t=>render(t),i/FPS);await p.screenshot({path:`${out}/f${String(i).padStart(5,'0')}.jpg`,type:'jpeg',quality:94});}}));
 await b.close()})();
