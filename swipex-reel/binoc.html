@@ -10,50 +10,50 @@ const DARK='#1E1E2D',LIGHT='#F5F5F5',GREEN='#0ABB87';
 const clamp=x=>Math.min(1,Math.max(0,x)),expo=x=>{x=clamp(x);return x>=1?1:1-Math.pow(2,-10*x)},eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2},lerp=(a,b,k)=>a+(b-a)*k;
 const cv=document.getElementById('cv'),g=cv.getContext('2d');
 const mk=()=>{const c=document.createElement('canvas');c.width=1080;c.height=1920;return c};
-const SC=mk(),sg=SC.getContext('2d'),LC=mk(),lg=LC.getContext('2d'),MC=mk(),mg=MC.getContext('2d');
+const GC=mk(),lg2=GC.getContext('2d'),SC=mk(),sg=SC.getContext('2d'),LC=mk(),lg=LC.getContext('2d'),MC=mk(),mg=MC.getContext('2d');
 // ---- логотип ----
 const PT=new Path2D('M63.3284 10.5327C65.5298 12.6545 65.5706 16.1122 63.3691 18.2339L54.074 27.271C51.8725 29.3928 48.2849 29.4321 46.0834 27.3103L36.7067 18.3518C36.7067 18.3518 36.666 18.3518 36.666 18.3125C34.1383 16.1907 30.8361 16.23 28.3085 18.3911L19.0541 27.3889C16.8526 29.5107 13.265 29.5499 11.0635 27.4282L1.68682 18.4697C-0.555432 16.3479 -0.555432 12.8902 1.64605 10.7685L11.0377 1.59131C13.2392 -0.530441 16.5628 -0.530436 18.805 1.59132L28.3492 10.6506C31.0807 12.9295 33.323 13.0867 36.7067 10.6506L46.0019 1.6135C48.2034 -0.508252 51.791 -0.547544 54.0332 1.57421L63.3284 10.5327Z'),PB=new Path2D('M61.4208 50.3074L52.4204 59.3822C50.2887 61.5128 46.8148 61.5522 44.6831 59.4216L35.6037 50.4258C33.472 48.2952 33.472 44.8231 35.5643 42.6926L44.5647 33.6178C46.6964 31.4872 50.1703 31.4478 52.302 33.5784L61.3814 42.5742C63.513 44.6653 63.5525 48.1769 61.4208 50.3074Z');
 // ---- випадкове (детерміноване) ----
 let seed=5;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
-// код: 34 рядки
-const BUG=17,LH=58,LY0=0;
-const TOKC=['rgba(245,245,245,.62)','rgba(30,30,45,.62)','rgba(245,245,245,.32)'];
-const CODE=[...Array(34)].map((_,i)=>{const ind=(i%9<3?0:i%9<7?1:2);const n=2+Math.floor(rnd()*4);const toks=[...Array(n)].map(()=>({w:60+Math.floor(rnd()*190),c:TOKC[Math.floor(rnd()*3)]}));return{ind,toks}});
-function frame(x,y,w,h){g2.fillStyle='#fff';g2.strokeStyle='rgba(30,30,45,.14)';g2.lineWidth=3;g2.beginPath();g2.roundRect(x,y,w,h,40);g2.fill();g2.stroke();
- g2.fillStyle=DARK;g2.beginPath();g2.roundRect(x+24,y+24,w-48,70,20);g2.fill();
- g2.fillStyle='rgba(30,30,45,.10)';g2.beginPath();g2.roundRect(x+24,y+118,w-48,h*0.34,24);g2.fill();
- for(let i=0;i<4;i++){g2.fillStyle='rgba(30,30,45,.18)';g2.beginPath();g2.roundRect(x+24,y+h*0.34+150+i*44,(w-48)*(i%2?0.6:0.9),18,9);g2.fill()}
- g2.fillStyle=DARK;g2.beginPath();g2.roundRect(x+24,y+h-100,(w-48)*0.5,56,28);g2.fill()}
-let g2;
-function drawWorld(ctx,cx,cy,z){
- g2=ctx;ctx.save();ctx.translate(540,920);ctx.scale(z,z);ctx.translate(-cx,-cy);
- // R1: полотно дизайнера
- ctx.fillStyle=GREEN;ctx.fillRect(-400,-400,2400,2200);
- ctx.fillStyle='rgba(245,245,245,.35)';for(let x=-400;x<1500;x+=60)for(let y=-400;y<1800;y+=60){ctx.beginPath();ctx.arc(x,y,2.2,0,7);ctx.fill()}
- frame(80,60,320,640);frame(470,-20,320,640);frame(860,140,320,640);frame(280,780,320,640);frame(700,860,320,560);
- ctx.strokeStyle=DARK;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(400,380);ctx.bezierCurveTo(430,380,440,260,470,260);ctx.moveTo(790,260);ctx.bezierCurveTo(830,260,830,420,860,420);ctx.moveTo(300,700);ctx.bezierCurveTo(320,740,300,740,340,780);ctx.stroke();
- ctx.strokeStyle=DARK;ctx.lineWidth=4;ctx.strokeRect(460,-30,340,660);ctx.fillStyle='#fff';[[460,-30],[800,-30],[460,630],[800,630]].forEach(([x,y])=>{ctx.fillRect(x-11,y-11,22,22);ctx.strokeRect(x-11,y-11,22,22)});
- ctx.fillStyle=DARK;ctx.beginPath();ctx.moveTo(740,520);ctx.lineTo(740,590);ctx.lineTo(758,575);ctx.lineTo(772,606);ctx.lineTo(786,600);ctx.lineTo(772,570);ctx.lineTo(796,570);ctx.closePath();ctx.fill();
- // R2: редактор коду
- ctx.fillStyle=GREEN;ctx.fillRect(1700,-400,1800,2400);
- ctx.fillStyle='rgba(30,30,45,.14)';ctx.fillRect(1700,-400,150,2400);
- CODE.forEach((L,i)=>{const y=LY0+i*LH+60;
-  ctx.fillStyle='rgba(30,30,45,.30)';ctx.beginPath();ctx.roundRect(1740,y+8,52,16,8);ctx.fill();
-  let x=1900+L.ind*70;L.toks.forEach(t=>{ctx.fillStyle=t.c;ctx.beginPath();ctx.roundRect(x,y,t.w,32,16);ctx.fill();x+=t.w+16})});
- const by=LY0+BUG*LH+60;
- ctx.fillStyle='rgba(245,245,245,.30)';ctx.fillRect(1850,by-14,1650,60);
- ctx.fillStyle=DARK;ctx.beginPath();ctx.arc(1775,by+16,26,0,7);ctx.fill();
- ctx.fillStyle='#fff';ctx.font='900 34px Inter';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('!',1775,by+18);
+// ---- реальний код ----
+const FILE_A=["import { useState } from 'react';","import { vibrate } from './haptics';","","export function SwipeCard({ card, onSwipe }) {","  const [dx, setDx] = useState(0);","  const threshold = 120;","","  function handleMove(e) {","    setDx(e.touches[0].clientX - startX);","  }","","  function handleEnd() {","    if (Math.abs(dx) > threshold) {","      onSwipe(dx > 0 ? 'right' : 'left');","      vibrate(10);","    }","    setDx(0);","  }","","  return (","    <div className=\"card\" style={{ x: dx }}>","      {card.title}","    </div>","  );","}"];
+const FILE_B=["// cart.js","import { fetchPrices } from './api';","","const TAX = 0.2;","","export function formatPrice(value) {","  return value.toFixed(2) + ' ₴';","}","","export function getTotal(items) {","  let total = 0;","","  for (let i = 0; i <= items.length; i++) {","    total += items[i].price;","  }","","  return total * (1 + TAX);","}","","export async function loadCart(id) {","  const items = await fetchPrices(id);","  return getTotal(items);","}"];
+const C={kw:GREEN,fn:'#FFFFFF',str:'#9AF0D5',num:'#9AF0D5',id:'#D8DAF0',com:'#7F83A6',pun:'#A9ACCB'};
+const KW=new Set(['import','from','export','function','const','let','return','if','async','await','for','new']);
+function tok(line){const out=[];const re=/(\/\/.*$)|('[^']*'|"[^"]*")|(\b\d+(?:\.\d+)?\b)|([A-Za-z_$][\w$]*)(?=\()|([A-Za-z_$][\w$]*)|(\s+)|(.)/g;let m;while((m=re.exec(line))){const t=m[0];let c;if(m[1])c=C.com;else if(m[2])c=C.str;else if(m[3])c=C.num;else if(m[4])c=KW.has(t)?C.kw:C.fn;else if(m[5])c=KW.has(t)?C.kw:C.id;else if(m[6])c=null;else c=C.pun;out.push([t,c])}return out}
+const TA=FILE_A.map(tok),TB=FILE_B.map(tok);
+const FS=52,LH=80,CW=31.2,AX=0,BX=2000,CODEX=190;
+const BUGI=FILE_B.findIndex(l=>l.includes('<='));const BUGY=BUGI*LH;
+const OPX=BX+CODEX+FILE_B[BUGI].indexOf('<=')*CW+CW;
+function drawFile(ctx,T,x0,lines,w){
+ ctx.fillStyle='#222236';ctx.fillRect(x0,-900,CODEX,3600);
+ ctx.font='500 '+FS+'px "JetBrains Mono",monospace';ctx.textBaseline='middle';
+ T.forEach((toks,i)=>{const y=i*LH;ctx.textAlign='right';ctx.fillStyle='#55587A';ctx.fillText(String(i+1),x0+CODEX-40,y);ctx.textAlign='left';let x=x0+CODEX;toks.forEach(([t,c])=>{if(c){ctx.fillStyle=c;ctx.fillText(t,x,y)}x+=t.length*CW})})}
+function drawWorld(ctx,cx,cy,z,t){
+ ctx.save();ctx.translate(540,920);ctx.scale(z,z);ctx.translate(-cx,-cy);
+ ctx.fillStyle='#2B2B42';ctx.fillRect(-1000,-900,6200,3600);
+ drawFile(ctx,TA,AX,FILE_A);
+ ctx.fillStyle='#222236';ctx.fillRect(1780,-900,80,3600);
+ drawFile(ctx,TB,BX,FILE_B);
+ // підсвітка бага
+ const k=expo((t-4.4)/0.5);
+ if(k>0){const pulse=0.5+0.5*Math.sin(t*5);ctx.fillStyle='rgba(10,187,135,'+(k*(0.16+0.08*pulse)).toFixed(3)+')';ctx.fillRect(BX+CODEX-10,BUGY-LH/2,1900,LH);
+  const ox=OPX-CW,ow=CW*2+12;ctx.strokeStyle=GREEN;ctx.lineWidth=4;ctx.globalAlpha=k;ctx.beginPath();ctx.roundRect(ox-8,BUGY-32,ow+8,64,12);ctx.stroke();
+  ctx.beginPath();for(let i=0;i<=ow;i+=6){const yy=BUGY+38+(i/6%2?4:-1);i?ctx.lineTo(ox+i,yy):ctx.moveTo(ox,yy)}ctx.stroke();ctx.globalAlpha=1}
  ctx.restore()}
 // ---- камера і фокус ----
-const CK=[[0,600,650,1],[1.7,860,760,1],[3.0,2350,330,1.05],[4.3,2480,1050,1.1],[6.0,2480,1050,1.5],[7.6,2480,1050,2.1],[10,2480,1050,2.3]];
+const CK=[[0,700,360,1],[1.7,850,560,1],[3.0,OPX-300,260,1],[4.3,OPX,BUGY-80/1.0,1.0],[6.0,OPX,BUGY-80/1.2,1.2],[7.6,OPX,BUGY-80/1.4,1.4],[10,OPX,BUGY-80/1.55,1.55]];
 function cam(t){let i=0;while(i<CK.length-2&&t>=CK[i+1][0])i++;const a=CK[i],b=CK[i+1],k=eio((t-a[0])/(b[0]-a[0]));
  return[lerp(a[1],b[1],k)+Math.sin(t*7.3)*5+Math.sin(t*13.1)*2,lerp(a[2],b[2],k)+Math.cos(t*6.1)*4+Math.sin(t*11.7)*2,lerp(a[3],b[3],k)]}
 const BK=[[0,20],[1.0,14],[1.7,2],[2.5,2],[3.0,12],[3.5,4],[4.0,1.5],[4.3,10],[4.7,0.5],[5.8,0.5],[6.0,4],[6.3,0.5],[7.6,0.5],[8.2,6],[10,6]];
 function blur(t){let i=0;while(i<BK.length-2&&t>=BK[i+1][0])i++;const a=BK[i],b=BK[i+1];return lerp(a[1],b[1],eio((t-a[0])/(b[0]-a[0])))}
 // ---- тексти в лінзі ----
-function plate(ctx,txt,size,alpha,sc,y){if(alpha<=0.01)return;ctx.save();ctx.globalAlpha=alpha;ctx.translate(540,y);ctx.scale(sc,sc);ctx.font='900 '+size+'px "Inter Display",Inter';ctx.letterSpacing=(-size*0.035)+'px';ctx.textAlign='center';ctx.textBaseline='middle';
- ctx.shadowColor='rgba(30,30,45,.5)';ctx.shadowBlur=30;ctx.shadowOffsetY=6;ctx.fillStyle=LIGHT;ctx.fillText(txt,0,size*0.04);ctx.shadowColor='transparent';ctx.fillText(txt,0,size*0.04);ctx.restore()}
+function plate(ctx,txt,size,alpha,sc,y,light,t0,t){if(alpha<=0.01)return;ctx.save();ctx.globalAlpha=Math.min(1,alpha*1.4);ctx.translate(540,y);ctx.scale(sc,sc);ctx.font='900 '+size+'px "Inter Display",Inter';ctx.letterSpacing=(-size*0.035)+'px';ctx.textAlign='left';ctx.textBaseline='middle';
+ const tw=ctx.measureText(txt).width,padx=34,w=tw+padx*2,h=size*1.28,p=expo((t-t0)/0.45);
+ ctx.shadowColor='rgba(0,0,0,.45)';ctx.shadowBlur=36;ctx.shadowOffsetY=10;
+ ctx.beginPath();ctx.rect(-w/2,-h/2-20,w*p,h+40);ctx.clip();
+ ctx.fillStyle=light?LIGHT:GREEN;ctx.beginPath();ctx.roundRect(-w/2,-h/2,w,h,size*0.2);ctx.fill();
+ ctx.shadowColor='transparent';ctx.fillStyle=DARK;ctx.fillText(txt,-tw/2,size*0.04);ctx.restore()}
 const win=(t,a,b)=>expo((t-a)/0.35)*(1-expo((t-b)/0.3));
 // ---- лінзи ----
 function lensGeom(t){const ent=expo(t/0.9),ex=eio((t-7.7)/0.8);const sep=lerp(180,0,ex),r=lerp(230,150,ex)*lerp(0.7,1,ent);return{sep,r,a:ent*(1-eio((t-8.3)/0.6)),cy:920}}
@@ -61,19 +61,21 @@ function render(T){
  const t=T;g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;g.filter='none';g.fillStyle='#000';g.fillRect(0,0,1080,1920);
  const L=lensGeom(t);
  if(L.a>0.003){
-  const [cx,cy,z]=cam(t);sg.globalAlpha=1;sg.filter='none';sg.clearRect(0,0,1080,1920);drawWorld(sg,cx,cy,z);
+  const [cx,cy,z]=cam(t);sg.globalAlpha=1;sg.filter='none';sg.clearRect(0,0,1080,1920);drawWorld(sg,cx,cy,z,t);
   // тексти
-  plate(sg,'Шукаємо баг…',76,win(t,1.8,3.2)*(0.5+0.5*Math.min(1,blur(t)<4?1:0.3)),0.94+0.06*expo((t-1.8)/0.5),920);
-  plate(sg,'Знайшли.',128,win(t,4.5,5.9),0.94+0.06*expo((t-4.5)/0.5),900);
-  plate(sg,'Це фіча.',138,win(t,6.1,99),0.94+0.06*expo((t-6.1)/0.5),900);
+  plate(sg,'Шукаємо баг…',76,win(t,1.8,3.2),0.96+0.04*expo((t-1.8)/0.5),900,false,1.8,t);
+  plate(sg,'Знайшли.',124,win(t,4.5,5.9),0.96+0.04*expo((t-4.5)/0.5),880,false,4.5,t);
+  plate(sg,'Це фіча.',136,win(t,6.1,99),0.96+0.04*expo((t-6.1)/0.5),880,true,6.1,t);
   // віньєтка
-  const vg=sg.createRadialGradient(540,920,150,540,920,520);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(30,30,45,.28)');sg.fillStyle=vg;sg.fillRect(0,0,1080,1920);
+  const vg=sg.createRadialGradient(540,920,150,540,920,520);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(20,20,34,.30)');sg.fillStyle=vg;sg.fillRect(0,0,1080,1920);
   // сфокусоване зображення
   lg.globalCompositeOperation='source-over';lg.clearRect(0,0,1080,1920);lg.filter='blur('+blur(t).toFixed(2)+'px)';lg.drawImage(SC,0,0);lg.filter='none';
   // м'яка маска двох кіл
   mg.clearRect(0,0,1080,1920);mg.fillStyle='#fff';mg.filter='blur(9px)';[540-L.sep,540+L.sep].forEach(x=>{mg.beginPath();mg.arc(x,L.cy,L.r,0,7);mg.fill()});mg.filter='none';
   lg.globalCompositeOperation='destination-in';lg.drawImage(MC,0,0);lg.globalCompositeOperation='source-over';
-  g.globalAlpha=L.a;g.drawImage(LC,0,0);g.globalAlpha=1}
+  mg.globalCompositeOperation='source-over';
+  lg2.clearRect(0,0,1080,1920);lg2.filter='blur(26px)';lg2.fillStyle='rgba(10,187,135,.45)';[540-L.sep,540+L.sep].forEach(x=>{lg2.beginPath();lg2.arc(x,L.cy,L.r+8,0,7);lg2.fill()});lg2.filter='none';
+  g.globalAlpha=L.a;g.drawImage(GC,0,0);g.drawImage(LC,0,0);g.globalAlpha=1}
  // лого
  const q=eio((t-8.2)/0.9);
  if(q>0){g.save();g.globalAlpha=q;const s=5.8*(0.92+0.08*q);g.translate(540-65*s/2,640+(1-q)*0);g.scale(s,s);g.fillStyle=GREEN;g.fill(PT);g.fillStyle=LIGHT;g.fill(PB);g.restore();
