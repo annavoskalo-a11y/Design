@@ -62,9 +62,9 @@ const markGreen=(h)=>{const w=h*65/61;return `<svg width="${w}" height="${h}" vi
 function mkCard(spec){
  const el=document.createElement('div');el.className='card';let w,h;
  switch(spec.t){
-  case 'o3':{const SZ={logo3d:[521,527],padlock:[433,535],unlock:[432,535],spring:[422,416],bulb:[699,808],qmark:[745,833],arrow:[613,703]};const [iw,ih]=(()=>{const im=SZ[spec.img];return im})();w=spec.w||430;h=w*ih/iw;el.style.overflow='visible';el.style.borderRadius='0';el.style.background='none';el.innerHTML=`<img src="../assets/${spec.img}.png" style="width:100%;height:100%;display:block;filter:drop-shadow(0 30px 34px rgba(11,11,11,.3))">`;break;}
+  case 'o3':{const SZ={logo3d:[521,527],padlock:[433,535],unlock:[432,535],spring:[422,416],bulb:[699,808],qmark:[745,833],arrow:[613,703]};const [iw,ih]=SZ[spec.img];const BG={light:'linear-gradient(160deg,#f4f4f4,#d9ddde)',mint:'linear-gradient(160deg,#dff6ec,#8fd6b9)',dark:'linear-gradient(160deg,#1d1d1d,#0b0b0b)'};el.style.background=BG[spec.bg||'light'];el.innerHTML=`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><img src="../assets/${spec.img}.png" style="max-width:80%;max-height:78%;display:block;filter:drop-shadow(0 22px 22px rgba(0,0,0,.3))"></div>`;break;}
   case 'obj':{w=420;h=520;const bgs={bulb:'linear-gradient(160deg,#ececec,#b9b9b9)',qmark:'linear-gradient(160deg,#d6f3e8,#86cdb2)',arrow:'linear-gradient(160deg,#1d1d1d,#0b0b0b)'};el.style.background=bgs[spec.img];el.innerHTML=`<img src="../assets/${spec.img}.png" style="position:absolute;left:14%;top:12%;width:72%;filter:drop-shadow(0 26px 26px rgba(0,0,0,.28))">`;break;}
-  case 'crop':{const NSZ=window.COMPSZ;const [iw,ih]=NSZ[spec.img];w=ih/iw>1.2?300:(spec.w||460);h=w*ih/iw;el.className+=' white';el.style.borderRadius='16px';el.style.boxShadow='0 0 0 2px rgba(120,120,120,.25)';el.innerHTML=`<img src="../assets/${spec.img}.png" style="width:100%;display:block">`;break;}
+  case 'crop':{const dk=/vohen|vh|vm|mm/.test(spec.img);el.style.background=dk?'#151515':'#EEF1F4';el.innerHTML=`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><img src="../assets/${spec.img}.png" style="max-width:88%;max-height:88%;display:block;border-radius:12px;box-shadow:0 14px 30px rgba(0,0,0,${dk?.5:.16})"></div>`;break;}
   case 'icon':{w=420;h=470;el.className+=' dark icon';el.innerHTML=iconSVG(spec.k);break;}
   case 'leaf':{w=400;h=500;el.className+=' leaf';el.innerHTML=`<div class="blob"></div><div class="pill" style="top:44%;font-size:30px"><i style="width:40px;height:40px"></i>Web</div><div class="pill" style="top:57%;font-size:30px"><i style="width:40px;height:40px"></i>Mobile</div>`;break;}
   case 'poster':{w=400;h=500;el.className+=' poster';el.innerHTML=`<div class="in"><div class="t" style="font-size:25px">Задумай ідею.<br>Ми зробимо продукт.</div><img class="b" src="../assets/bulb.png"><div class="f" style="font-size:19px">${markGreen(18)}Swipex</div></div>`;break;}
@@ -74,11 +74,11 @@ function mkCard(spec){
   case 'tile':{w=410;h=460;el.className+=' tile';el.innerHTML=markGreen(120);break;}
   case 'phone':{w=300;const e=phoneEl({screen:spec.screen,w});e.className='iph';return {el:e,w,h:w*PHONE_ASPECT,spec};}
  }
- el.style.width=w+'px';el.style.height=h+'px';return {el,w,h,spec};}
+ w=420;h=520;el.style.width=w+'px';el.style.height=h+'px';return {el,w,h,spec};}
 
 /* ---------- heroes on an ellipse (camera visits them in order, then loops) ---------- */
-const C=n=>({t:'crop',img:n});const HEROES=[C('wp-comp'),C('vohen-card'),C('medis-price'),{t:'phone',screen:'wp'},C('medis-list'),C('comp/vm2'),C('wp-profile'),C('medis-title'),{t:'phone',screen:'vohen'},C('comp/md7'),C('vohen-menu'),C('comp/mm0'),{t:'win',img:'medis-top'},{t:'tile'}];
-const HOLD=Array.from({length:14},(_,k)=>[.4,.45,.3,.5,.4,.3,.45,.4,.5,.35,.4,.45,.5,.7][k]), TR=.34;
+const C=n=>({t:'crop',img:n});const HEROES=[C('wp-comp'),C('vohen-card'),{t:'o3',img:'logo3d',bg:'dark'},C('medis-price'),{t:'icon',k:'ring'},{t:'o3',img:'padlock',bg:'mint'},C('medis-list'),{t:'icon',k:'x'},{t:'poster'},C('vohen-menu'),{t:'o3',img:'bulb',bg:'light'},{t:'tile'}];
+const HOLD=[.36,.4,.4,.4,.2,.45,.4,.22,.5,.4,.4,.7], TR=.27;
 const NH=HEROES.length, heroes=[];
 HEROES.forEach((sp,k)=>{const c=mkCard(sp);const th=-Math.PI/2+k*2*Math.PI/NH;const x=1000*Math.cos(th),y=1500*Math.sin(th);
   const rY=(k%2?-1:1)*rr(3,7), rX=rr(-4,4), rZ=rr(-3,3);
@@ -87,13 +87,13 @@ HEROES.forEach((sp,k)=>{const c=mkCard(sp);const th=-Math.PI/2+k*2*Math.PI/NH;co
   gsap.set(c.el,{z:0,rotationY:rY*1.4,rotationX:rX*1.2,rotationZ:rZ});heroes.push(c);});
 
 /* ---------- filler cards ---------- */
-const ALLC=Object.keys(window.COMPSZ);
-const FILL=[{w:8,f:()=>({t:'crop',img:pick(ALLC)})},{w:1.6,f:()=>({t:'phone',screen:pick(['wp','vohen','modal'])})},{w:1,f:()=>({t:'win',img:pick(['medis-top','vohen-desktop'])})}];
+const ALLC=Object.keys(window.COMPSZ).filter(k=>!/vh7|vm0/.test(k));
+const FILL=[{w:5,f:()=>({t:'crop',img:pick(ALLC)})},{w:3.2,f:()=>({t:'o3',img:pick(['logo3d','padlock','unlock','spring','bulb','qmark','arrow']),bg:pick(['light','mint','dark'])})},{w:2.2,f:()=>({t:'icon',k:pick(Object.keys(ICON))})},{w:.9,f:()=>({t:'poster'})},{w:.9,f:()=>({t:'sign'})},{w:1.2,f:()=>({t:'tile'})}];
 const tot=FILL.reduce((a,b)=>a+b.w,0);
 function pickFill(){let r=R()*tot;for(const f of FILL){if((r-=f.w)<=0)return f.f();}return FILL[0].f();}
-const NF=64;let placed=0,guard=0;
+const NF=70;let placed=0,guard=0;
 while(placed<NF&&guard++<5000){
- const c=mkCard(pickFill());const sc=rr(.3,.55)*(c.spec.t==='win'?.8:1)*(c.spec.t==='phone'?1.15:1);
+ const c=mkCard(pickFill());const sc=rr(.28,.5);
  const fw=c.w*sc, fh=c.h*sc; const z=rr(-950,150);
  const a=R()*Math.PI*2, rad=.25+.75*Math.sqrt(R()), x=rad*1300*Math.cos(a), y=rad*2000*Math.sin(a);
  if(z>-120){let bad=false;for(const h of heroes){const hr=.62*Math.max(h.w,h.h)+80;const d=Math.hypot(x-h.x,y-h.y);if(d<hr+.5*Math.max(fw,fh)){bad=true;break;}}if(bad)continue;}
