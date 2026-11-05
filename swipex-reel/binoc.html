@@ -1,7 +1,7 @@
 <!doctype html><meta charset="utf-8">
 <style>
 /* Кольори бренду Swipex. Шрифт — тимчасовий (Inter), справжній шрифт бренду не надано. */
-*{margin:0}body{width:1080px;height:1920px;overflow:hidden;background:#1E1E2D}
+*{margin:0}body{width:1080px;height:1920px;overflow:hidden;background:#000}
 canvas{display:block}
 </style>
 <canvas id="cv" width="1080" height="1920"></canvas>
@@ -17,7 +17,8 @@ const PT=new Path2D('M63.3284 10.5327C65.5298 12.6545 65.5706 16.1122 63.3691 18
 let seed=5;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
 // код: 34 рядки
 const BUG=17,LH=58,LY0=0;
-const CODE=[...Array(34)].map((_,i)=>{const ind=(i%9<3?0:i%9<7?1:2);const n=2+Math.floor(rnd()*4);const toks=[...Array(n)].map(()=>({w:60+Math.floor(rnd()*190),c:rnd()<.3?GREEN:rnd()<.55?'rgba(30,30,45,.78)':'#9AA0B4'}));return{ind,toks}});
+const TOKC=['rgba(245,245,245,.62)','rgba(30,30,45,.62)','rgba(245,245,245,.32)'];
+const CODE=[...Array(34)].map((_,i)=>{const ind=(i%9<3?0:i%9<7?1:2);const n=2+Math.floor(rnd()*4);const toks=[...Array(n)].map(()=>({w:60+Math.floor(rnd()*190),c:TOKC[Math.floor(rnd()*3)]}));return{ind,toks}});
 function frame(x,y,w,h){g2.fillStyle='#fff';g2.strokeStyle='rgba(30,30,45,.14)';g2.lineWidth=3;g2.beginPath();g2.roundRect(x,y,w,h,40);g2.fill();g2.stroke();
  g2.fillStyle=DARK;g2.beginPath();g2.roundRect(x+24,y+24,w-48,70,20);g2.fill();
  g2.fillStyle='rgba(30,30,45,.10)';g2.beginPath();g2.roundRect(x+24,y+118,w-48,h*0.34,24);g2.fill();
@@ -27,21 +28,21 @@ let g2;
 function drawWorld(ctx,cx,cy,z){
  g2=ctx;ctx.save();ctx.translate(540,920);ctx.scale(z,z);ctx.translate(-cx,-cy);
  // R1: полотно дизайнера
- ctx.fillStyle=GREEN;ctx.fillRect(-400,-400,1900,2200);
+ ctx.fillStyle=GREEN;ctx.fillRect(-400,-400,2400,2200);
  ctx.fillStyle='rgba(245,245,245,.35)';for(let x=-400;x<1500;x+=60)for(let y=-400;y<1800;y+=60){ctx.beginPath();ctx.arc(x,y,2.2,0,7);ctx.fill()}
  frame(80,60,320,640);frame(470,-20,320,640);frame(860,140,320,640);frame(280,780,320,640);frame(700,860,320,560);
  ctx.strokeStyle=DARK;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(400,380);ctx.bezierCurveTo(430,380,440,260,470,260);ctx.moveTo(790,260);ctx.bezierCurveTo(830,260,830,420,860,420);ctx.moveTo(300,700);ctx.bezierCurveTo(320,740,300,740,340,780);ctx.stroke();
  ctx.strokeStyle=DARK;ctx.lineWidth=4;ctx.strokeRect(460,-30,340,660);ctx.fillStyle='#fff';[[460,-30],[800,-30],[460,630],[800,630]].forEach(([x,y])=>{ctx.fillRect(x-11,y-11,22,22);ctx.strokeRect(x-11,y-11,22,22)});
  ctx.fillStyle=DARK;ctx.beginPath();ctx.moveTo(740,520);ctx.lineTo(740,590);ctx.lineTo(758,575);ctx.lineTo(772,606);ctx.lineTo(786,600);ctx.lineTo(772,570);ctx.lineTo(796,570);ctx.closePath();ctx.fill();
  // R2: редактор коду
- ctx.fillStyle='#ECEEF2';ctx.fillRect(1700,-400,1800,2400);
- ctx.fillStyle='#E1E4EB';ctx.fillRect(1700,-400,150,2400);
+ ctx.fillStyle=GREEN;ctx.fillRect(1700,-400,1800,2400);
+ ctx.fillStyle='rgba(30,30,45,.14)';ctx.fillRect(1700,-400,150,2400);
  CODE.forEach((L,i)=>{const y=LY0+i*LH+60;
-  ctx.fillStyle='rgba(30,30,45,.28)';ctx.beginPath();ctx.roundRect(1740,y+8,52,16,8);ctx.fill();
+  ctx.fillStyle='rgba(30,30,45,.30)';ctx.beginPath();ctx.roundRect(1740,y+8,52,16,8);ctx.fill();
   let x=1900+L.ind*70;L.toks.forEach(t=>{ctx.fillStyle=t.c;ctx.beginPath();ctx.roundRect(x,y,t.w,32,16);ctx.fill();x+=t.w+16})});
  const by=LY0+BUG*LH+60;
- ctx.fillStyle='rgba(10,187,135,.20)';ctx.fillRect(1850,by-14,1650,60);
- ctx.fillStyle=GREEN;ctx.beginPath();ctx.arc(1775,by+16,26,0,7);ctx.fill();
+ ctx.fillStyle='rgba(245,245,245,.30)';ctx.fillRect(1850,by-14,1650,60);
+ ctx.fillStyle=DARK;ctx.beginPath();ctx.arc(1775,by+16,26,0,7);ctx.fill();
  ctx.fillStyle='#fff';ctx.font='900 34px Inter';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('!',1775,by+18);
  ctx.restore()}
 // ---- камера і фокус ----
@@ -52,12 +53,12 @@ const BK=[[0,20],[1.0,14],[1.7,2],[2.5,2],[3.0,12],[3.5,4],[4.0,1.5],[4.3,10],[4
 function blur(t){let i=0;while(i<BK.length-2&&t>=BK[i+1][0])i++;const a=BK[i],b=BK[i+1];return lerp(a[1],b[1],eio((t-a[0])/(b[0]-a[0])))}
 // ---- тексти в лінзі ----
 function plate(ctx,txt,size,alpha,sc,y){if(alpha<=0.01)return;ctx.save();ctx.globalAlpha=alpha;ctx.translate(540,y);ctx.scale(sc,sc);ctx.font='900 '+size+'px "Inter Display",Inter';ctx.letterSpacing=(-size*0.035)+'px';ctx.textAlign='center';ctx.textBaseline='middle';
- const w=ctx.measureText(txt).width+80,h=size+64;ctx.fillStyle='rgba(245,245,245,.92)';ctx.beginPath();ctx.roundRect(-w/2,-h/2,w,h,36);ctx.fill();ctx.fillStyle=DARK;ctx.fillText(txt,0,size*0.04);ctx.restore()}
+ ctx.shadowColor='rgba(30,30,45,.5)';ctx.shadowBlur=30;ctx.shadowOffsetY=6;ctx.fillStyle=LIGHT;ctx.fillText(txt,0,size*0.04);ctx.shadowColor='transparent';ctx.fillText(txt,0,size*0.04);ctx.restore()}
 const win=(t,a,b)=>expo((t-a)/0.35)*(1-expo((t-b)/0.3));
 // ---- лінзи ----
-function lensGeom(t){const ent=expo(t/0.9),ex=eio((t-7.7)/0.8);const sep=lerp(145,0,ex),r=lerp(250,150,ex)*lerp(0.7,1,ent);return{sep,r,a:ent*(1-eio((t-8.3)/0.6)),cy:920}}
+function lensGeom(t){const ent=expo(t/0.9),ex=eio((t-7.7)/0.8);const sep=lerp(180,0,ex),r=lerp(230,150,ex)*lerp(0.7,1,ent);return{sep,r,a:ent*(1-eio((t-8.3)/0.6)),cy:920}}
 function render(T){
- const t=T;g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;g.filter='none';g.fillStyle=DARK;g.fillRect(0,0,1080,1920);
+ const t=T;g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;g.filter='none';g.fillStyle='#000';g.fillRect(0,0,1080,1920);
  const L=lensGeom(t);
  if(L.a>0.003){
   const [cx,cy,z]=cam(t);sg.globalAlpha=1;sg.filter='none';sg.clearRect(0,0,1080,1920);drawWorld(sg,cx,cy,z);
@@ -66,11 +67,11 @@ function render(T){
   plate(sg,'Знайшли.',128,win(t,4.5,5.9),0.94+0.06*expo((t-4.5)/0.5),900);
   plate(sg,'Це фіча.',138,win(t,6.1,99),0.94+0.06*expo((t-6.1)/0.5),900);
   // віньєтка
-  const vg=sg.createRadialGradient(540,920,150,540,920,520);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(30,30,45,.35)');sg.fillStyle=vg;sg.fillRect(0,0,1080,1920);
+  const vg=sg.createRadialGradient(540,920,150,540,920,520);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(30,30,45,.28)');sg.fillStyle=vg;sg.fillRect(0,0,1080,1920);
   // сфокусоване зображення
   lg.globalCompositeOperation='source-over';lg.clearRect(0,0,1080,1920);lg.filter='blur('+blur(t).toFixed(2)+'px)';lg.drawImage(SC,0,0);lg.filter='none';
   // м'яка маска двох кіл
-  mg.clearRect(0,0,1080,1920);mg.fillStyle='#fff';mg.filter='blur(5px)';[540-L.sep,540+L.sep].forEach(x=>{mg.beginPath();mg.arc(x,L.cy,L.r,0,7);mg.fill()});mg.filter='none';
+  mg.clearRect(0,0,1080,1920);mg.fillStyle='#fff';mg.filter='blur(9px)';[540-L.sep,540+L.sep].forEach(x=>{mg.beginPath();mg.arc(x,L.cy,L.r,0,7);mg.fill()});mg.filter='none';
   lg.globalCompositeOperation='destination-in';lg.drawImage(MC,0,0);lg.globalCompositeOperation='source-over';
   g.globalAlpha=L.a;g.drawImage(LC,0,0);g.globalAlpha=1}
  // лого
