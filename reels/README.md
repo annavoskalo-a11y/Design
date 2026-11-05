@@ -1,0 +1,13 @@
+# Swipex — Instagram Reels
+
+Три рілси 1080×1920, 30 fps (HTML + GSAP → MP4 через Playwright та ffmpeg).
+Бренд узято з Figma «Social Media (Instagram)»: Inter, `#0ABB87`, `#0B0B0B`, `#F5F5F5`, `#B8B8B8`.
+
+| Файл | Ідея | Референс |
+|---|---|---|
+| `out/01-idea-to-product.mp4` | Кінетична типографіка: «Є ідея? → Ми зробимо продукт» → 4 кроки процесу → логотип і CTA | Brander |
+| `out/02-grid-story.mp4` | Зелена сітка 3×5, плитка з логотипом проїжджає рядком і лишає за собою «Swipex × проєкт» | Giti × VW |
+| `out/03-b2b-cards.mp4` | «Топ-3 помилки в B2B-платформах»: 3D-картки над перспективною сіткою, що збираються у плитку-лого | Parasail |
+
+Рендер: `npm i gsap @fontsource/inter playwright`, потім `node render.mjs 01-idea-to-product 30`.
+Логотип у `logo.js` перемальований вручну — замініть на офіційний SVG.

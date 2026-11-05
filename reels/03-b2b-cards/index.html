@@ -1,0 +1,63 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><title>Reel 3</title>
+<link rel="stylesheet" href="../shared.css">
+<style>
+body,#stage{background:#0B0B0B}
+#glow{position:absolute;left:-200px;right:-200px;bottom:-500px;height:1400px;background:radial-gradient(closest-side,rgba(10,187,135,.38),rgba(10,187,135,0));}
+#floor{position:absolute;left:-1400px;right:-1400px;top:900px;height:2600px;transform-origin:50% 0;transform:perspective(900px) rotateX(72deg);
+ background-image:linear-gradient(rgba(10,187,135,.35) 2px,transparent 2px),linear-gradient(90deg,rgba(10,187,135,.35) 2px,transparent 2px);background-size:120px 120px;
+ -webkit-mask-image:linear-gradient(transparent,#000 40%);mask-image:linear-gradient(transparent,#000 40%)}
+#title{position:absolute;left:88px;right:88px;top:270px;font-size:92px;line-height:1.08;letter-spacing:-.035em;text-transform:uppercase}
+#title .g{color:var(--green);text-transform:none;display:block;font-size:104px}
+.mask{overflow:hidden;display:block;padding:.06em 0}
+.e{display:block}
+#world{position:absolute;inset:0;perspective:1500px}
+.card{position:absolute;width:760px;padding:40px 44px 44px;border-radius:44px;background:linear-gradient(160deg,#202020,#121212);border:2px solid #2d2d2d;box-shadow:0 40px 80px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07);transform-style:preserve-3d}
+.card .row{display:flex;align-items:center;gap:26px;margin-bottom:24px}
+.chip{width:84px;height:84px;border-radius:26px;background:var(--green);display:flex;align-items:center;justify-content:center;box-shadow:0 0 40px rgba(10,187,135,.55)}
+.card h3{font-size:54px;letter-spacing:-.03em;line-height:1.05}
+.card p{font-size:36px;font-weight:400;color:var(--grey);line-height:1.38}
+.card .bar{position:absolute;left:44px;bottom:-2px;height:6px;width:0;background:var(--green);border-radius:3px;box-shadow:0 0 24px var(--green)}
+#tile{position:absolute;left:290px;top:700px;width:500px;height:500px;border-radius:120px;background:linear-gradient(160deg,#2b2b2b,#0f0f0f);border:2px solid #353535;box-shadow:0 0 140px rgba(10,187,135,.55),0 60px 100px rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;opacity:0}
+#end{position:absolute;left:0;right:0;top:1230px;text-align:center}
+#end .a{font-size:84px;line-height:1.1;letter-spacing:-.035em}
+#end .b{font-size:40px;font-weight:400;color:var(--grey);margin-top:22px;line-height:1.4}
+#end .m{font-size:44px;font-weight:600;color:var(--green);margin-top:44px}
+</style></head><body><div id="stage">
+<div id="glow"></div><div id="floor"></div>
+<div id="title"><span class="mask"><span id="t1" style="display:block;color:var(--green)">Топ-3</span></span><span class="mask"><span id="t2" style="display:block">Помилки в B2B-<br>платформах</span></span></div>
+<div id="world">
+ <div class="card" id="c1" style="left:90px;top:640px"><div class="row"><div class="chip" id="i1"></div><h3>Складна навігація</h3></div><p>Забагато кліків до потрібної дії — користувач губиться в меню</p><div class="bar"></div></div>
+ <div class="card" id="c2" style="left:230px;top:960px"><div class="row"><div class="chip" id="i2"></div><h3>Розкидані дані</h3></div><p>Інформація розпорошена по різних модулях, немає єдиного джерела правди</p><div class="bar"></div></div>
+ <div class="card" id="c3" style="left:110px;top:1280px"><div class="row"><div class="chip" id="i3"></div><h3>Немає інтеграцій</h3></div><p>Платформа живе окремо від CRM та бухгалтерії — дані переносять вручну</p><div class="bar"></div></div>
+</div>
+<div id="tile"></div>
+<div id="end"><div class="a"><span class="mask"><span class="e">Задумай ідею.</span></span><span class="mask"><span class="e" style="color:var(--green)">Ми зробимо продукт.</span></span></div><div class="b" id="eb">Веб- та мобільна розробка,<br>що приносить результат</div><div class="m" id="em">hello@swipex.ua</div></div>
+</div>
+<script src="../vendor/gsap.min.js"></script><script src="../logo.js"></script>
+<script>
+const ic={i1:'<path d="M8 6h14M8 16h14M8 26h14" stroke="#0B0B0B" stroke-width="3.4" stroke-linecap="round"/>',i2:'<circle cx="9" cy="9" r="4" fill="#0B0B0B"/><circle cx="23" cy="11" r="4" fill="#0B0B0B"/><circle cx="14" cy="23" r="4" fill="#0B0B0B"/>',i3:'<path d="M12 10l-5 6 5 6M20 10l5 6-5 6" stroke="#0B0B0B" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'};
+for(const k in ic)document.getElementById(k).innerHTML=`<svg width="44" height="44" viewBox="0 0 32 32">${ic[k]}</svg>`;
+document.getElementById('tile').innerHTML=logoSVG(240,false);
+const tl=gsap.timeline({paused:true,defaults:{ease:'power4.out'}});
+// floor drifts forever
+tl.fromTo('#floor',{backgroundPositionY:0},{backgroundPositionY:960,duration:13,ease:'none'},0);
+tl.fromTo('#glow',{opacity:.4},{opacity:1,duration:3,ease:'sine.inOut'},0);
+tl.fromTo('#t1',{yPercent:115},{yPercent:0,duration:.7},.2).fromTo('#t2',{yPercent:115},{yPercent:0,duration:.8},.4);
+const cards=[['#c1',1.3,-9,7],['#c2',2.0,8,-6],['#c3',2.7,-7,5]];
+cards.forEach(([s,a,ry,rz],i)=>{
+ tl.fromTo(s,{y:900,z:-500,rotateY:ry*4,rotateX:30,opacity:0},{y:0,z:0,rotateY:ry,rotateX:6,rotate:rz*.3,opacity:1,duration:1.1,ease:'power3.out'},a);
+ tl.fromTo(s+' .bar',{width:0},{width:380,duration:.8,ease:'power2.out'},a+.8);
+ tl.to(s,{y:i%2?-16:16,rotateY:ry*.4,duration:3.4,ease:'sine.inOut'},a+1.1);
+});
+// hold, then cards collapse into the logo tile
+const C=7.4;
+cards.forEach(([s],i)=>tl.to(s,{x:(i%2?-1:1)*40,y:()=>0,scale:.2,left:'290px',top:'700px',z:-300,opacity:0,rotateX:0,rotateY:0,rotate:0,duration:.8,ease:'power3.in'},C+i*.08));
+tl.to('#title',{opacity:0,y:-60,duration:.5,ease:'power2.in'},C);
+tl.fromTo('#tile',{scale:.2,opacity:0,rotate:-25},{scale:1,opacity:1,rotate:0,duration:1.0,ease:'back.out(1.6)'},C+.7);
+tl.to('#tile',{y:-18,duration:1.6,yoyo:true,repeat:1,ease:'sine.inOut'},C+1.8);
+tl.set('#end',{opacity:0},0).set('#end',{opacity:1},C+1.45);
+tl.fromTo('.e',{yPercent:115},{yPercent:0,duration:.7,stagger:.12},C+1.5);
+tl.fromTo('#eb',{opacity:0,y:30},{opacity:1,y:0,duration:.6},C+2.1).fromTo('#em',{opacity:0,y:30},{opacity:1,y:0,duration:.6},C+2.4);
+tl.to({},{duration:.01},12.6);
+window.TL=tl;
+</script></body></html>

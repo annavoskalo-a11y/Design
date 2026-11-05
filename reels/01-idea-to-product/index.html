@@ -1,0 +1,109 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><title>Reel 1</title>
+<link rel="stylesheet" href="../shared.css">
+<style>
+.scene{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:0 88px;visibility:hidden}
+.mask{overflow:hidden;display:block;padding:.04em 0 .02em}
+.mask>span{display:block;will-change:transform}
+.big{line-height:.98;letter-spacing:-.035em;text-transform:uppercase}
+#s1{background:var(--dark)} #s2{background:var(--green);color:var(--dark)} #s3{background:var(--dark)} #s4{background:var(--light);color:var(--dark);align-items:center;text-align:center}
+#s1 .big{font-size:300px}
+#s2 .big{font-size:188px}
+.q{color:var(--green)}
+.step{position:absolute;left:88px;right:88px;top:50%;transform:translateY(-50%)}
+.step .n{font-size:44px;color:var(--green);letter-spacing:.08em;margin-bottom:28px;display:flex;align-items:center;gap:20px}
+.step .n i{display:block;height:4px;width:0;background:var(--green);border-radius:2px}
+.step .w{font-size:132px;letter-spacing:-.03em;line-height:1.02}
+.step .s{font-size:52px;font-weight:400;color:var(--grey);margin-top:26px}
+.dots{position:absolute;left:88px;right:88px;top:1560px;display:flex;gap:14px}
+.dots b{flex:1;height:6px;border-radius:3px;background:#2a2a2a;position:relative;overflow:hidden}
+.dots b i{position:absolute;inset:0;background:var(--green);transform:scaleX(0);transform-origin:left}
+#brand{display:flex;align-items:center;gap:26px}
+#brand .wm{font-size:92px;letter-spacing:-.03em}
+#tag{font-size:84px;line-height:1.1;letter-spacing:-.03em;margin-top:84px}
+#sub{font-size:38px;font-weight:400;color:#6a6a6a;margin-top:26px;line-height:1.4}
+#mail{font-size:40px;font-weight:600;color:var(--green);letter-spacing:.02em;margin-top:70px}
+#follow{margin-top:50px;background:var(--dark);color:#fff;border-radius:999px;padding:30px 54px;font-size:42px;display:flex;align-items:center;gap:22px}
+#follow .a{color:var(--green)}
+.ring{position:absolute;border-radius:50%;border:3px solid var(--green);opacity:0}
+</style></head><body><div id="stage">
+
+<div class="scene" id="s1">
+  <div class="big mask"><span id="a1">Є</span></div>
+  <div class="big mask"><span id="a2">Ідея<span class="q" id="qm" style="display:inline-block;transform-origin:50% 12%">?</span></span></div>
+</div>
+
+<div class="scene" id="s2">
+  <div class="big mask"><span class="b2">Ми</span></div>
+  <div class="big mask"><span class="b2">зробимо</span></div>
+  <div class="big mask"><span class="b2" style="color:#fff">продукт</span></div>
+</div>
+
+<div class="scene" id="s3">
+  <div class="step" id="st1"><div class="n">01<i></i></div><div class="w mask"><span>Дослідимо</span></div><div class="s">Розберемось у задачі та ринку</div></div>
+  <div class="step" id="st2"><div class="n">02<i></i></div><div class="w mask"><span>Спроєктуємо</span></div><div class="s">UX/UI дизайн, що працює</div></div>
+  <div class="step" id="st3"><div class="n">03<i></i></div><div class="w mask"><span>Розробимо</span></div><div class="s">Web &amp; Mobile</div></div>
+  <div class="step" id="st4"><div class="n">04<i></i></div><div class="w mask"><span>Масштабуємо</span></div><div class="s">Підтримуємо після запуску</div></div>
+  <div class="dots"><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b></div>
+</div>
+
+<div class="scene" id="s4">
+  <div id="brand"><div id="lg"></div><div class="wm" id="wm">Swipex</div></div>
+  <div id="tag"><span class="mask"><span class="t4">Задумай ідею.</span></span><span class="mask"><span class="t4" style="color:var(--green)">Ми зробимо продукт.</span></span></div>
+  <div id="sub">Веб- та мобільна розробка,<br>що приносить результат</div>
+  <div id="mail">hello@swipex.ua</div>
+  <div id="follow">Підписуйся <span class="a">→</span></div>
+</div>
+
+<div class="ring" id="r1"></div>
+</div>
+<script src="../vendor/gsap.min.js"></script><script src="../logo.js"></script>
+<script>
+document.getElementById('lg').innerHTML=logoSVG(116,true);
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const tl=gsap.timeline({paused:true,defaults:{ease:'power4.out'}});
+const rise=(sel,at,d=.7,st=.09)=>tl.fromTo(sel,{yPercent:115,rotate:3},{yPercent:0,rotate:0,duration:d,stagger:st},at);
+const out=(sel,at,d=.35,st=.04)=>tl.to(sel,{yPercent:-115,duration:d,stagger:st,ease:'power3.in'},at);
+const wipe=(sel,at,d=.7)=>{tl.set(sel,{visibility:'visible',clipPath:'circle(0% at 50% 62%)'},at).to(sel,{clipPath:'circle(150% at 50% 62%)',duration:d,ease:'power3.inOut'},at)};
+
+// S1 0–2.6
+tl.set('#s1',{visibility:'visible'},0);
+rise('#a1',.15,.6); rise('#a2',.38,.75);
+tl.fromTo('#qm',{rotate:-70,y:-30},{rotate:0,y:0,duration:1.3,ease:'elastic.out(1,.35)'},.9);
+tl.to('#a1,#a2',{x:-14,duration:1.2,ease:'none'},.9);
+out('#a1,#a2',2.15,.4,.06);
+// S2 green 2.5–5.2
+wipe('#s2',2.35,.75);
+rise('.b2',2.85,.7,.1);
+tl.to('.b2',{x:i=>[14,-10,12][i],duration:1.4,ease:'sine.inOut'},3.5);
+out('.b2',4.75,.35,.05);
+// S3 steps 5.0–9.2
+tl.set('#s3',{visibility:'visible'},4.95);
+const dur=1.05, t0=5.0;
+for(let i=1;i<=4;i++){
+  const a=t0+(i-1)*dur;
+  tl.set('#st'+i,{visibility:'visible'},a); 
+  if(i>1) tl.set('#st'+(i-1),{visibility:'hidden'},a);
+  tl.fromTo(`#st${i} .w span`,{yPercent:115},{yPercent:0,duration:.55},a+.04)
+    .fromTo(`#st${i} .n i`,{width:0},{width:120,duration:.6},a+.05)
+    .fromTo(`#st${i} .n,#st${i} .s`,{opacity:0,y:18},{opacity:1,y:0,duration:.5},a+.1)
+    .fromTo(`.dots b:nth-child(${i}) i`,{scaleX:0},{scaleX:1,duration:dur-.1,ease:'none'},a+.05);
+}
+tl.set('#st1,#st2,#st3',{visibility:'hidden'},0); tl.set('#st4',{visibility:'hidden'},0);
+tl.set('#s3 .step',{visibility:'hidden'},0);
+// re-assert visibility after defaults (timeline order)
+for(let i=1;i<=4;i++) tl.set('#st'+i,{visibility:'visible'},t0+(i-1)*dur+.001);
+for(let i=1;i<=3;i++) tl.set('#st'+i,{visibility:'hidden'},t0+i*dur+.001);
+tl.to('#s3 .step .w span',{yPercent:-115,duration:.3,ease:'power3.in'},t0+4*dur-.15);
+// S4 light 9.1–13.5
+const T=t0+4*dur+.05; // 9.25
+wipe('#s4',T-.2,.8);
+tl.fromTo('#lg svg',{scale:0,rotate:-90},{scale:1,rotate:0,duration:.9,ease:'back.out(1.8)'},T+.35);
+tl.fromTo('#wm',{opacity:0,x:-30},{opacity:1,x:0,duration:.6},T+.6);
+rise('.t4',T+.85,.7,.12);
+tl.fromTo('#sub',{opacity:0,y:30},{opacity:1,y:0,duration:.6},T+1.35);
+tl.fromTo('#mail',{opacity:0,y:30},{opacity:1,y:0,duration:.6},T+1.6);
+tl.fromTo('#follow',{opacity:0,scale:.8,y:30},{opacity:1,scale:1,y:0,duration:.7,ease:'back.out(1.6)'},T+1.9);
+tl.to('#follow .a',{x:10,duration:.45,repeat:3,yoyo:true,ease:'sine.inOut'},T+2.7);
+tl.to({}, {duration:.01}, T+4.4);
+window.TL=tl;
+</script></body></html>
