@@ -1,0 +1,139 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><title>Reel 7</title>
+<link rel="stylesheet" href="../shared.css">
+<style>
+:root{--paper:#F5F5F5;--ink:#0B0B0B}
+body,#stage{background:var(--ink)}
+.scene{position:absolute;inset:0;visibility:hidden;perspective:1500px;perspective-origin:50% 50%;overflow:hidden}
+.scene.l{background:var(--paper);color:var(--ink)} .scene.d{background:var(--ink);color:#fff}
+.world{position:absolute;inset:0;transform-style:preserve-3d}
+.it{position:absolute;will-change:transform}
+.cut{border-radius:22px;overflow:hidden;background:#fff}
+.d .cut{box-shadow:0 0 0 2px rgba(255,255,255,.08),0 30px 60px rgba(0,0,0,.6)}
+.l .cut{box-shadow:0 0 0 2px rgba(11,11,11,.05),0 26px 50px rgba(11,11,11,.2)}
+.cut img,.png img{display:block;width:100%}
+.png img{filter:drop-shadow(0 24px 30px rgba(11,11,11,.28))}
+.d .png img{filter:drop-shadow(0 20px 30px rgba(0,0,0,.6))}
+.iph{filter:drop-shadow(0 30px 40px rgba(0,0,0,.4))}
+.win .in{overflow:hidden;position:relative;width:100%;height:100%}
+.pill{display:inline-block;white-space:nowrap;border-radius:999px;line-height:1;letter-spacing:-.03em}
+.l .pill{background:var(--ink);color:#fff}.d .pill{background:#fff;color:var(--ink)}
+.pill.g{background:var(--green)!important;color:var(--ink)!important}
+.chip{border-radius:28%;background:var(--green);display:flex;align-items:center;justify-content:center;box-shadow:0 18px 40px rgba(10,187,135,.4)}
+.tile{border-radius:26%;display:flex;align-items:center;justify-content:center}
+.l .tile{background:var(--ink)} .d .tile{background:#1c1c1c;box-shadow:0 0 0 2px rgba(255,255,255,.08)}
+.tile.w{background:#fff!important;box-shadow:0 0 0 2px rgba(11,11,11,.06),0 24px 50px rgba(11,11,11,.2)}
+.sign{border-radius:34px;background:#101010;color:#fff;display:flex;align-items:center;justify-content:center;font-size:96px;letter-spacing:-.04em;box-shadow:0 0 0 3px #2a2a2a,0 0 120px rgba(255,255,255,.55),0 0 40px rgba(255,255,255,.4)}
+.hero{border-radius:80px}
+.cover{position:absolute;inset:0;opacity:0;z-index:99}
+.cap{position:absolute;left:0;right:0;text-align:center}
+.big{font-size:150px;letter-spacing:-.05em;line-height:.95}
+.mask{overflow:hidden;display:block;padding:.08em 0}.mask>span{display:block}
+</style></head><body><div id="stage">
+<div class="scene l" id="S1"><div class="world" id="w1"></div><div class="cover" id="cv1" style="background:#0B0B0B"></div></div>
+<div class="scene d" id="S2"><div class="world" id="w2"></div><div class="cover" id="cv2" style="background:#F5F5F5"></div></div>
+<div class="scene l" id="S3"><div class="world" id="w3"></div><div class="cover" id="cv3" style="background:#0B0B0B"></div></div>
+<div class="scene d" id="S4"><div class="cap" style="top:700px"><div id="lg" style="display:flex;justify-content:center"></div></div><div class="cap" style="top:960px"><div class="big mask"><span id="nm">Swipex</span></div></div></div>
+</div>
+<script src="../vendor/gsap.min.js"></script><script src="../logo.js"></script><script src="../phone.js"></script>
+<script>
+document.getElementById('lg').innerHTML=logoSVG(220,false);
+const NS={'wp-profile':[370,350],'wp-comp':[370,235],'wp-news':[370,360],'medis-title':[760,130],'medis-price':[380,320],'medis-list':[690,360],'medis-video':[690,410],'vohen-card':[492,160],'vohen-menu':[240,580],'vohen-desktop':[1440,1024],'medis-top':[1440,1024],'team-a':[300,300],'team-b':[300,300],'team-c':[280,280],'team-d':[300,300],'team-e':[1080,440],'team-f':[640,300],bulb:[699,808],arrow:[613,703],qmark:[745,833]};
+let seed=7;const R=()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const pick=a=>a[Math.floor(R()*a.length)], rr=(a,b)=>a+R()*(b-a);
+const ICONS=['<path d="M8 6h14M8 16h14M8 26h14" stroke="#0B0B0B" stroke-width="3.4" stroke-linecap="round"/>','<circle cx="9" cy="9" r="4" fill="#0B0B0B"/><circle cx="23" cy="11" r="4" fill="#0B0B0B"/><circle cx="14" cy="23" r="4" fill="#0B0B0B"/>','<path d="M12 10l-5 6 5 6M20 10l5 6-5 6" stroke="#0B0B0B" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>','<path d="M7 17l6 6 12-14" stroke="#0B0B0B" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>','<path d="M8 16h16M17 8l8 8-8 8" stroke="#0B0B0B" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'];
+const WORDS=['Web','Mobile','UX/UI','Бренд','Продукт','Результат','Ідея','Дизайн','Код','Запуск'];
+
+/* factories: each returns {el,w,h} */
+function mk(type,dark,o={}){let el=document.createElement('div');el.className='it';let w=o.w,h;
+ if(type==='crop'){const n=o.img;const [iw,ih]=NS[n];w=w||rr(190,340);h=w*ih/iw;el.className+=' cut';el.innerHTML=`<img src="../assets/${n}.png">`;}
+ else if(type==='png'){const n=o.img;const [iw,ih]=NS[n];w=w||rr(170,290);h=w*ih/iw;el.className+=' png';el.innerHTML=`<img src="../assets/${n}.png">`;}
+ else if(type==='win'){const n=o.img;w=w||rr(380,520);h=w*1024/1440;el.className+=' cut win';el.innerHTML=`<div class="in"><img src="../assets/${n}.png" style="width:100%"></div>`;}
+ else if(type==='iph'){w=w||rr(210,280);const e=phoneEl({screen:o.screen,w});e.classList.add('it');return {el:e,w,h:w*PHONE_ASPECT};}
+ else if(type==='pill'){const fs=rr(40,64);w=0;h=fs*1.5;el.innerHTML=`<span class="pill${o.g?' g':''}" style="font-size:${fs}px;padding:${fs*.38}px ${fs*.8}px ${fs*.42}px">${o.txt}</span>`;el.dataset.fit=1;}
+ else if(type==='chip'){w=h=rr(96,150);el.className+=' chip';el.innerHTML=`<svg width="${w*.5}" height="${w*.5}" viewBox="0 0 32 32">${o.icon}</svg>`;}
+ else if(type==='tile'){w=h=rr(120,190);el.className+=' tile'+(o.white?' w':'');el.innerHTML=logoSVG(w*.5,!!o.white);}
+ else if(type==='sign'){w=rr(300,380);h=w*.42;el.className+=' sign';el.style.fontSize=(w*.27)+'px';el.textContent='Swipex';}
+ return {el,w,h};}
+
+function build(wid,N,dark,heroSpec,pool){
+ const world=document.getElementById(wid);const items=[];
+ const hero=mk(heroSpec.type,dark,heroSpec.o||{});
+ return {world,items,hero};}
+
+function populate(wid,dark,N,pool,hero,seedBase){
+ seed=seedBase; const world=document.getElementById(wid); const els=[];
+ const order=[...Array(N).keys()].sort(()=>R()-.5);
+ for(let k=0;k<N;k++){
+  const spec=pool[k%pool.length]; const it=mk(spec.t,dark,spec.o?spec.o():{});
+  let z=-1500+(order[k]+R())/N*1350, x=rr(-720,720), y=rr(-1150,1150);
+  if(z>-450&&Math.abs(x)<540&&Math.abs(y)<960){x=(R()<.5?-1:1)*(540+R()*200);}
+  const w=it.w||200,h=it.h||80;
+  const cx=540+x,cy=960+y;
+  it.el.style.left=(it.el.dataset.fit?cx:cx-w/2)+'px';it.el.style.top=(it.el.dataset.fit?cy:cy-h/2)+'px';
+  if(!it.el.dataset.fit){it.el.style.width=w+'px';it.el.style.height=h+'px';}
+  world.appendChild(it.el);
+  gsap.set(it.el,{z,rotation:rr(-12,12),xPercent:it.el.dataset.fit?-50:0,yPercent:it.el.dataset.fit?-50:0});
+  els.push(it.el);}
+ return els;}
+function addHero(wid,el,w,h,z){const world=document.getElementById(wid);el.style.left=(540-w/2)+'px';el.style.top=(960-h/2)+'px';el.style.width=w+'px';el.style.height=h+'px';world.appendChild(el);gsap.set(el,{z});return el;}
+
+const tl=gsap.timeline({paused:true,defaults:{ease:'power4.out'}});
+const show=(sel,a,b)=>{tl.set(sel,{visibility:'visible'},a);if(b!=null)tl.set(sel,{visibility:'hidden'},b)};
+function runScene(sid,wid,cvid,t0,dur,els,hero,camFrom){
+  show('#'+sid,t0,t0+dur);
+  tl.fromTo(els,{opacity:0,scale:.5},{opacity:1,scale:1,duration:.7,stagger:{each:.018,from:'random'},ease:'back.out(1.4)'},t0+.05);
+  tl.fromTo('#'+wid,Object.assign({z:-200},camFrom),{z:1300,x:0,y:0,rotationX:0,rotationY:0,duration:dur-.05,ease:'power2.in'},t0);
+  tl.fromTo(hero,{opacity:0},{opacity:1,duration:.5},t0+.05);
+  tl.fromTo('#'+cvid,{opacity:0},{opacity:1,duration:.22,ease:'power1.in'},t0+dur-.3);
+}
+/* ---------- S1 white (0–5.0): flies into a black logo tile ---------- */
+const P1=[{t:'crop',o:()=>({img:pick(['wp-comp','wp-profile','wp-news','medis-price','medis-list','vohen-card','medis-title'])})},
+ {t:'crop',o:()=>({img:pick(['team-a','team-b','team-c','team-d']),w:rr(150,260)})},
+ {t:'png',o:()=>({img:pick(['bulb','arrow','qmark'])})},
+ {t:'pill',o:()=>({txt:pick(WORDS),g:R()<.3})},
+ {t:'chip',o:()=>({icon:pick(ICONS)})},
+ {t:'tile',o:()=>({})},
+ {t:'iph',o:()=>({screen:pick(['wp','vohen','modal'])})},
+ {t:'crop',o:()=>({img:pick(['team-e','team-f']),w:rr(300,420)})},
+ {t:'win',o:()=>({img:pick(['medis-top','vohen-desktop'])})},
+];
+const hero1=addHero('w1',(()=>{const e=document.createElement('div');e.className='it tile hero';e.style.background='#0B0B0B';e.innerHTML=logoSVG(300,false);return e})(),600,600,-250);
+const e1=populate('w1',false,34,P1,hero1,11);
+runScene('S1','w1','cv1',0,5.0,e1,hero1,{x:60,y:40,rotationY:10,rotationX:-4});
+
+/* ---------- S2 black (5.0–10.0): flies into a white card ---------- */
+const P2=[{t:'iph',o:()=>({screen:pick(['vohen','modal','wp'])})},
+ {t:'crop',o:()=>({img:pick(['wp-comp','wp-news','medis-price','medis-list','vohen-card','wp-profile'])})},
+ {t:'win',o:()=>({img:pick(['vohen-desktop','medis-top'])})},
+ {t:'png',o:()=>({img:pick(['bulb','arrow','qmark'])})},
+ {t:'crop',o:()=>({img:pick(['team-a','team-b','team-c','team-d','team-e']),w:rr(150,300)})},
+ {t:'pill',o:()=>({txt:pick(WORDS),g:R()<.35})},
+ {t:'chip',o:()=>({icon:pick(ICONS)})},
+ {t:'tile',o:()=>({})},
+];
+const heroEl2=document.createElement('div');heroEl2.className='it cut hero';heroEl2.innerHTML='<img src="../assets/wp-news.png" style="width:100%">';
+const hero2=addHero('w2',heroEl2,600,583,-250);
+const e2=populate('w2',true,34,P2,hero2,23);
+(()=>{const sg=mk('sign',true);const w=sg.w,h=sg.h;sg.el.style.left=(540-170-w/2)+'px';sg.el.style.top=(960-380-h/2)+'px';sg.el.style.width=w+'px';sg.el.style.height=h+'px';document.getElementById('w2').appendChild(sg.el);gsap.set(sg.el,{z:-800,rotation:-6});e2.push(sg.el);})();
+runScene('S2','w2','cv2',5.0,5.0,e2,hero2,{x:-70,y:-30,rotationY:-10,rotationX:4});
+
+/* ---------- S3 white (10.0–14.4): flies into black tile → logo outro ---------- */
+const P3=[{t:'crop',o:()=>({img:pick(['wp-comp','wp-news','medis-price','medis-list','vohen-card','medis-video','vohen-menu'])})},
+ {t:'iph',o:()=>({screen:pick(['wp','vohen','modal'])})},
+ {t:'crop',o:()=>({img:pick(['team-a','team-b','team-c','team-d','team-f']),w:rr(150,280)})},
+ {t:'png',o:()=>({img:pick(['bulb','arrow','qmark'])})},
+ {t:'pill',o:()=>({txt:pick(WORDS),g:R()<.3})},
+ {t:'chip',o:()=>({icon:pick(ICONS)})},
+ {t:'tile',o:()=>({white:R()<.4})},
+ {t:'win',o:()=>({img:pick(['medis-top','vohen-desktop'])})}];
+const hero3=addHero('w3',(()=>{const e=document.createElement('div');e.className='it tile hero';e.style.background='#0B0B0B';e.innerHTML=logoSVG(300,false);return e})(),600,600,-250);
+const e3=populate('w3',false,32,P3,hero3,37);
+runScene('S3','w3','cv3',10.0,4.4,e3,hero3,{x:50,y:-50,rotationY:8,rotationX:3});
+
+/* ---------- S4 black: logo + name only ---------- */
+const S4=14.4; show('#S4',S4);
+tl.fromTo('#lg svg',{scale:0,rotate:-120,opacity:0},{scale:1,rotate:0,opacity:1,duration:.9,ease:'back.out(1.8)'},S4+.05);
+tl.fromTo('#nm',{yPercent:115},{yPercent:0,duration:.8},S4+.45);
+tl.to({},{duration:.01},S4+2.8);
+window.TL=tl;
+</script></body></html>
