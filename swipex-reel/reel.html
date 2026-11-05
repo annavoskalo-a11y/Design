@@ -70,33 +70,32 @@ $('lt').setAttribute('d','M63.3284 10.5327C65.5298 12.6545 65.5706 16.1122 63.36
 function rowBox(row){const r=document.createRange();r.selectNodeContents(st.children[row]);return r.getBoundingClientRect()}
 function pend(x,y,col){const d=$('dot'),l=$('line');d.style.display=l.style.display='block';d.style.background=l.style.background=col;d.style.left=x+'px';d.style.top=y+'px';l.style.left=x+'px';l.style.height=y+'px'}
 function ripple(id,x,y,t0,t,col){const r=$(id),k=(t-t0)/0.7;if(k<0||k>1){r.style.display='none';return}r.style.display='block';r.style.left=x+'px';r.style.top=y+'px';r.style.borderColor=col;r.style.opacity=1-k;r.style.transform='scale('+(1+ease(k)*4)+')'}
-function render(t){
+function draw(t){
  for(const id of['t1','t2','w','logo','dot','line','r1','r2','feed','fx'])$(id).style.display='none';
  for(const g of['g0','g1','g2','g3'])$(g).style.display='none';
  st.style.display='none';st.style.filter='none';c0.style.display='none';curs.forEach(e=>e.style.display='none');
  let bg=A;
  if(t<1.2){
   const el=$('t1');el.style.display='block';el.style.top='540px';
-  el.style.opacity=(t<0.2&&Math.floor(t*30)%2==0)?0.35:1;
-  const jit=t>0.55&&t<0.8?Math.sin(t*120)*8:0;el.style.transform='translateX('+jit+'px)';
+  el.style.transform='none';
   el.innerHTML='СТОП<br>СТОП<br>СТОП';
-  const y=520+ease(t/0.6)*210;pend(540,y,D);
-  ripple('r1',540,730,0.6,t,D);ripple('r2',540,730,0.75,t,D)}
+  const y=520+eio(t/0.8)*210;pend(540,y,D);
+  ripple('r1',540,730,0.8,t,D);ripple('r2',540,730,0.95,t,D)}
  else if(t<2.8){
   const T=t-1.2;
   feed.style.display='block';
-  const off=-(T*1500);[...feed.children].forEach((c,i)=>{let y=((i*640+off)%3200+3200)%3200-640;c.style.top=y+'px'});
-  feed.style.filter='blur('+(2+Math.min(6,T*10))+'px)';
+  const off=-(T*850);[...feed.children].forEach((c,i)=>{let y=((i*640+off)%3200+3200)%3200-640;c.style.top=y+'px'});
+  feed.style.filter='blur(4px)';
   const el=$('t2');el.style.display='block';
   el.innerHTML='<span style="color:var(--light)">ти свайпаєш</span><br><span style="color:'+D+'">не дивлячись</span>';
-  el.style.transform='scale('+(0.92+0.08*ease(T/0.25))+')';
+  el.style.transform='none';
   pend(540,700+Math.sin(T*4)*5,D)}
  else if(t<4.8){
   bg=D;const i=Math.min(3,Math.floor((t-2.8)/0.5)),k=((t-2.8)%0.5)/0.5;
   const el=$('w');el.style.display='block';el.textContent=words[i];
-  el.style.transform='scale('+(0.94+0.06*ease(k/0.25))+')';
+  el.style.transform='translateY('+(18*(1-ease(k/0.3)))+'px)';
   $('fx').style.display='block';$('g'+i).style.display='block';
-  if(i==0){c0.style.display='block';const p=ease(k/0.8);c0.style.left=(960-300*p)+'px';c0.style.top=(1350-340*p)+'px';}
+  if(i==0){c0.style.display='block';const p=ease(k/0.9);c0.style.left=(960-300*p)+'px';c0.style.top=(1350-340*p)+'px';}
   if(i==1){$('bz').setAttribute('stroke-dashoffset',1-ease(k/0.75));$('bzH').style.opacity=clamp((k-0.7)/0.2)*0.8}
   if(i==2){const p=ease(k/0.5);const r=$('sel');r.setAttribute('x',40+500*(1-p));r.setAttribute('width',1000*p);sh.style.opacity=clamp((k-.45)/.2)}
   if(i==3){const p=ease(k/0.85);$('ez').setAttribute('stroke-dashoffset',1-p);const pa=$('ez'),L2=pa.getTotalLength(),pt=pa.getPointAtLength(L2*eio(k/0.9));const d=$('ezd');d.setAttribute('cx',pt.x);d.setAttribute('cy',pt.y);d.style.opacity=clamp(k/0.1)}}
@@ -104,35 +103,62 @@ function render(t){
   bg=D;st.style.display='block';st.style.top=(960-75-4*150)+'px';st.style.transform='none';
   O.forEach(o=>{o.style.color=L;o.style.transform='none'});
   const sr=st.getBoundingClientRect(),R=O[4].getBoundingClientRect(),ox=R.left+R.width/2,oy=R.top+R.height/2;
-  const k=clamp((t-5.1)/0.8);
+  const k=clamp((t-5.1)/1.0);
   if(k<1&&t>5.1)pend(ox,-20+(oy+20)*ease(k),L);
-  else if(k>=1){const p=clamp((t-5.9)/0.25);O[4].style.color=A;O[4].style.transform='scale('+(1+0.35*Math.sin(p*Math.PI))+')'}
+  else if(k>=1){const p=clamp((t-6.1)/0.4);O[4].style.color=A;O[4].style.transform='scale('+(1+0.25*Math.sin(p*Math.PI))+')'}
   // курсори колег
-  const tg=[[1,'right',-300,-200,6.0],[7,'left',1400,1500,6.12],[2,'right',1400,300,6.24]];
+  const tg=[[1,'right',-300,-200,6.2],[7,'left',1400,1500,6.3],[2,'right',1400,300,6.4]];
   tg.forEach(([row,side,sx,sy,t0],j)=>{
    const rr=rowBox(row);
    const rx=(side=='right'?rr.right-90:rr.left+30)-sr.left,ry=row*150+85;
-   const p=ease((t-t0)/0.35),bob=Math.sin(t*9+j)*4;
+   const p=ease((t-t0)/0.5),bob=Math.sin(t*9+j)*4;
    const e=curs[j];e.style.display=t>t0?'block':'none';
    e.style.left=(sx+(rx-sx)*p)+'px';e.style.top=(sy+(ry-sy)*p+bob)+'px'})}
- else if(t<7.1){
-  const k=(t-6.6)/0.5;st.style.display='block';
-  st.style.top=(960-75-4*150-ease(k)*1700)+'px';st.style.transform='none';
+ else if(t<7.2){
+  const k=(t-6.6)/0.6;st.style.display='block';
+  st.style.top=(960-75-4*150-eio(k)*1700)+'px';st.style.transform='none';
   st.style.filter='blur('+(Math.sin(clamp(k)*Math.PI)*26)+'px)';
   O.forEach(o=>{o.style.color=L;o.style.transform='none'});O[4].style.color=A;
   const sr=st.getBoundingClientRect();
   [[1,'right'],[7,'left'],[2,'right']].forEach(([row,side],j)=>{const rr=rowBox(row);const e=curs[j];e.style.display='block';e.style.left=((side=='right'?rr.right-90:rr.left+30)-sr.left)+'px';e.style.top=(row*150+85)+'px'});
-  bg=k>0.5?L:D}
+  bg=D}
  else{
-  bg=L;const T=t-7.1;
+  bg=L;const T=t-7.2;
   const l=$('logo');l.style.display='block';
-  const a=ease(T/0.55),b=ease((T-0.2)/0.5),w=ease((T-0.5)/0.5);
+  const a=ease(T/0.8),b=ease((T-0.3)/0.7),w=ease((T-0.7)/0.7);
   $('lt').setAttribute('transform','translate('+(-90*(1-a))+' 0)');$('lt').style.opacity=a;
   $('lb').setAttribute('transform','translate(0 '+(-70*(1-b))+')');$('lb').style.opacity=b;
   const lw=$('lw');lw.style.opacity=w;lw.style.transform='translateY('+(40*(1-w))+'px)';
-  ripple('r1',540,700+282*0.75,7.55,t,'#0ABB87')}
+  ripple('r1',540,700+282*0.75,7.9,t,'#0ABB87')}
  $('bg').style.background=bg;
  $('r1').style.zIndex=5;
+}
+
+const lerp=(a,b,x)=>a+(b-a)*clamp(x);
+const rgb=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16));
+const CA=rgb('#0ABB87'),CD=rgb('#1E1E2D'),CL=rgb('#F5F5F5');
+const mix=(a,b,x)=>'rgb('+a.map((v,i)=>Math.round(lerp(v,b[i],eio(x)))).join(',')+')';
+const SP=1.25;
+function render(T){
+ const t=T/SP;draw(t);
+ let bg=t<2.7?CA:null,col;
+ if(t<2.7)col=mix(CA,CA,0);
+ else if(t<3.0)col=mix(CA,CD,(t-2.7)/0.3);
+ else if(t<6.9)col=mix(CD,CD,0);
+ else if(t<7.3)col=mix(CD,CL,(t-6.9)/0.4);
+ else col=mix(CL,CL,0);
+ $('bg').style.background=col;
+ const e=0.14,env=(a,b,fi,fo)=>Math.min(fi?ease((t-a)/e):1,fo?ease((b-t)/e):1);
+ let o=1;
+ if(t<1.2)o=env(0,1.2,0,1);
+ else if(t<2.8)o=env(1.2,2.8,1,1);
+ else if(t<4.8){const i=Math.min(3,Math.floor((t-2.8)/0.5)),a=2.8+i*0.5;o=Math.min(ease((t-a-0.02)/0.12),i==3?1:ease((a+0.5-t)/0.1));if(i==0)o=Math.min(o,1)}
+ else if(t<6.6)o=env(4.8,6.6,1,0);
+ else if(t<7.2)o=1;
+ else o=ease((t-7.2)/0.3);
+ if(t>=6.6&&t<7.2)o=1-eio((t-6.85)/0.35);
+ for(const id of['t1','t2','w','fx','feed','stack','logo','dot','line'])$(id).style.opacity=(id=='logo')?(t>=7.2?ease((t-7.2)/0.3):0):o;
+ c0.style.opacity=o;
 }
 render(0);
 </script>
