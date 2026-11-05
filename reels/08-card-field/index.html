@@ -1,0 +1,155 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><title>Reel 8</title>
+<link rel="stylesheet" href="../shared.css">
+<style>
+:root{--paper:#F5F5F5;--ink:#0B0B0B}
+body,#stage{background:var(--paper)}
+#scene{position:absolute;inset:0;perspective:1500px;perspective-origin:50% 50%;overflow:hidden;background:var(--paper)}
+#rot{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-style:preserve-3d;transform-origin:540px 960px}
+#cam{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-style:preserve-3d}
+.card{position:absolute;overflow:hidden;border-radius:16px;transform-style:flat}
+.card img{display:block}
+.fit{width:100%;height:100%;object-fit:cover}
+.dark{background:#171717;box-shadow:inset 0 0 0 2px #2b2b2b}
+.white{background:#fff;box-shadow:inset 0 0 0 2px #dcdcdc}
+.icon svg{position:absolute;left:12%;top:8%;width:76%;height:84%}
+.leaf{background:radial-gradient(120% 90% at 75% 8%,#53735a 0%,#2c4833 38%,#142218 100%)}
+.leaf .blob{position:absolute;left:-25%;top:30%;width:140%;height:90%;border-radius:50%;background:radial-gradient(closest-side,#0b130d,#101d13 70%,transparent);transform:rotate(-18deg)}
+.leaf .pill{position:absolute;left:14%;display:flex;align-items:center;gap:6%;padding:3.4% 6% 3.4% 3.4%;border-radius:999px;background:rgba(255,255,255,.11);backdrop-filter:blur(2px);color:#e9efe9;font-weight:600;letter-spacing:-.01em}
+.leaf .pill i{display:block;border-radius:50%;background:var(--green);position:relative}
+.leaf .pill i::before,.leaf .pill i::after{content:"";position:absolute;left:50%;top:50%;background:#0B0B0B;transform:translate(-50%,-50%)}
+.leaf .pill i::before{width:50%;height:9%}.leaf .pill i::after{width:9%;height:50%}
+.poster{background:linear-gradient(135deg,#9b9b9b,#4b4b4b 45%,#2a2a2a);padding:4.5%;box-shadow:none}
+.poster .in{position:relative;width:100%;height:100%;background:#fafafa;border-radius:6px;overflow:hidden;box-shadow:inset 0 0 0 3px #1f1f1f}
+.poster .t{position:absolute;left:8%;top:6%;color:#111;font-weight:600;letter-spacing:-.02em;line-height:1.12}
+.poster .b{position:absolute;left:21%;top:26%;width:60%}
+.poster .f{position:absolute;right:7%;bottom:5%;display:flex;align-items:center;gap:4%;color:#111;font-weight:700;letter-spacing:-.03em}
+.sign{background:radial-gradient(90% 60% at 50% 60%,#2a2a2a,#0c0c0c 70%)}
+.sign .box{position:absolute;left:5%;top:30%;width:92%;height:34%;background:#f6f6f6;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:5%;color:#0B0B0B;font-weight:700;letter-spacing:-.04em;transform:perspective(500px) rotateY(-22deg) rotateX(6deg);box-shadow:0 0 70px rgba(255,255,255,.55),0 0 22px rgba(255,255,255,.55),14px 12px 0 #bdbdbd}
+.book{background:linear-gradient(160deg,#10c28d 0%,#0a9a6e 55%,#075b43 100%);color:#0B0B0B}
+.book::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(0,0,0,.55) 22%,transparent 26%);background-size:22px 22px;-webkit-mask-image:radial-gradient(120% 70% at 80% 75%,#000,transparent 70%);mask-image:radial-gradient(120% 70% at 80% 75%,#000,transparent 70%)}
+.book .spine{position:absolute;left:0;top:0;bottom:0;width:5%;background:linear-gradient(90deg,#064a37,#0a8c66)}
+.book .nm{position:absolute;left:12%;top:7%;display:flex;align-items:center;gap:3%;font-weight:700;letter-spacing:-.04em}
+.book .tg{position:absolute;left:12%;bottom:8%;font-weight:600;color:rgba(0,0,0,.7);line-height:1.25}
+.tile{background:linear-gradient(160deg,#12c892,#0ABB87 60%,#08a173);display:flex;align-items:center;justify-content:center}
+.win{background:#fff;box-shadow:inset 0 0 0 2px #d6d6d6;padding:0}
+.win img{width:100%}
+#name{position:absolute;left:0;right:0;top:1330px;text-align:center;font-size:130px;letter-spacing:-.05em;opacity:0;color:var(--ink)}
+.iph{position:absolute}
+</style></head><body><div id="stage"><div id="scene"><div id="rot"><div id="cam"></div></div></div><div id="name">Swipex</div></div>
+<script src="../vendor/gsap.min.js"></script><script src="../logo.js"></script><script src="../phone.js"></script>
+<script>
+const P=1500, CAM=document.getElementById('cam'), ROT=document.getElementById('rot'), SC=document.getElementById('scene');
+let seed=5;const R=()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const rr=(a,b)=>a+R()*(b-a), pick=a=>a[Math.floor(R()*a.length)];
+
+/* ---------- dotted pictograms (white dots on dark cards) ---------- */
+const ln=(x1,y1,x2,y2,n)=>Array.from({length:n+1},(_,i)=>[x1+(x2-x1)*i/n,y1+(y2-y1)*i/n]);
+const arc=(cx,cy,r,n,a0=0,a1=Math.PI*2)=>Array.from({length:n},(_,i)=>{const a=a0+(a1-a0)*i/n;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]});
+const ICON={
+ ring:()=>arc(100,100,64,30),
+ x:()=>[...ln(122,122,176,176,6),...ln(78,122,24,176,6),...ln(122,78,176,24,6),...ln(78,78,24,24,6),[92,92],[108,92],[92,108],[108,108]],
+ person:()=>[...arc(100,62,28,15),...ln(100,106,100,150,4),...ln(78,165,122,165,4)],
+ layers:()=>[...ln(100,40,170,75,5),...ln(170,75,100,110,5),...ln(100,110,30,75,5),...ln(30,75,100,40,5),...ln(30,105,100,140,5),...ln(100,140,170,105,5),...ln(30,135,100,170,5),...ln(100,170,170,135,5)],
+ code:()=>[...ln(72,58,28,100,5),...ln(28,100,72,142,5),...ln(128,58,172,100,5),...ln(172,100,128,142,5),...ln(112,52,88,148,6)],
+ phone:()=>[...ln(70,30,130,30,4),...ln(130,30,130,170,9),...ln(130,170,70,170,4),...ln(70,170,70,30,9),[100,155]],
+ bulb:()=>[...arc(100,82,42,20),...ln(86,138,114,138,3),...ln(90,152,110,152,2),...ln(94,166,106,166,1)],
+ arrow:()=>[...ln(36,100,156,100,8),...ln(112,56,156,100,4),...ln(156,100,112,144,4)]};
+const iconSVG=k=>`<svg viewBox="0 0 200 200">${ICON[k]().map(([x,y])=>`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.6" fill="#fff"/>`).join('')}</svg>`;
+
+/* ---------- card factories: return {el,w,h} (w,h = design size in world px) ---------- */
+const markGreen=(h)=>{const w=h*65/61;return `<svg width="${w}" height="${h}" viewBox="0 0 65 61" fill="none"><path d="M63.3284 10.5327C65.5298 12.6545 65.5706 16.1122 63.3691 18.2339L54.074 27.271C51.8725 29.3928 48.2849 29.4321 46.0834 27.3103L36.7067 18.3518C36.7067 18.3518 36.666 18.3518 36.666 18.3125C34.1383 16.1907 30.8361 16.23 28.3085 18.3911L19.0541 27.3889C16.8526 29.5107 13.265 29.5499 11.0635 27.4282L1.68682 18.4697C-0.555432 16.3479 -0.555432 12.8902 1.64605 10.7685L11.0377 1.59131C13.2392 -0.530441 16.5628 -0.530436 18.805 1.59132L28.3492 10.6506C31.0807 12.9295 33.323 13.0867 36.7067 10.6506L46.0019 1.6135C48.2034 -0.508252 51.791 -0.547544 54.0332 1.57421L63.3284 10.5327Z" fill="#0B0B0B"/><path d="M61.4208 50.3074L52.4204 59.3822C50.2887 61.5128 46.8148 61.5522 44.6831 59.4216L35.6037 50.4258C33.472 48.2952 33.472 44.8231 35.5643 42.6926L44.5647 33.6178C46.6964 31.4872 50.1703 31.4478 52.302 33.5784L61.3814 42.5742C63.513 44.6653 63.5525 48.1769 61.4208 50.3074Z" fill="#F5F5F5"/></svg>`};
+function mkCard(spec){
+ const el=document.createElement('div');el.className='card';let w,h;
+ switch(spec.t){
+  case 'portrait':{w=420;h=520;el.className+=' dark';el.innerHTML=`<img class="fit" src="../assets/${spec.img}.png">`;break;}
+  case 'icon':{w=420;h=470;el.className+=' dark icon';el.innerHTML=iconSVG(spec.k);break;}
+  case 'leaf':{w=400;h=500;el.className+=' leaf';el.innerHTML=`<div class="blob"></div><div class="pill" style="top:44%;font-size:30px"><i style="width:40px;height:40px"></i>Web</div><div class="pill" style="top:57%;font-size:30px"><i style="width:40px;height:40px"></i>Mobile</div>`;break;}
+  case 'poster':{w=400;h=500;el.className+=' poster';el.innerHTML=`<div class="in"><div class="t" style="font-size:25px">Задумай ідею.<br>Ми зробимо продукт.</div><img class="b" src="../assets/bulb.png"><div class="f" style="font-size:19px">${markGreen(18)}Swipex</div></div>`;break;}
+  case 'sign':{w=430;h=440;el.className+=' sign';el.innerHTML=`<div class="box" style="font-size:62px">Swipex${markGreen(46)}</div>`;break;}
+  case 'win':{w=600;h=427;el.className+=' win';el.innerHTML=`<img src="../assets/medis-top.png">`;break;}
+  case 'book':{w=420;h=530;el.className+=' book';el.innerHTML=`<div class="spine"></div><div class="nm" style="font-size:38px">${markGreen(30)}Swipex</div><div class="tg" style="font-size:22px">Веб- та мобільна<br>розробка, що приносить<br>результат</div>`;break;}
+  case 'tile':{w=410;h=460;el.className+=' tile';el.innerHTML=markGreen(120);break;}
+  case 'phone':{w=300;const e=phoneEl({screen:spec.screen,w});e.className='iph';return {el:e,w,h:w*PHONE_ASPECT,spec};}
+ }
+ el.style.width=w+'px';el.style.height=h+'px';return {el,w,h,spec};}
+
+/* ---------- heroes on an ellipse (camera visits them in order, then loops) ---------- */
+const HEROES=[{t:'portrait',img:'team-a'},{t:'portrait',img:'team-b'},{t:'icon',k:'ring'},{t:'icon',k:'x'},{t:'icon',k:'person'},{t:'phone',screen:'wp'},{t:'poster'},{t:'sign'},{t:'win'},{t:'book'},{t:'tile'}];
+const HOLD=[.36,.46,.24,.24,.26,.44,.44,.44,.36,.36,.7], TR=.24;
+const NH=HEROES.length, heroes=[];
+HEROES.forEach((sp,k)=>{const c=mkCard(sp);const th=-Math.PI/2+k*2*Math.PI/NH;const x=900*Math.cos(th),y=1300*Math.sin(th);
+  const rY=(k%2?-1:1)*rr(3,7), rX=rr(-4,4), rZ=rr(-3,3);
+  c.x=x;c.y=y;c.rot={ry:rY,rx:rX,rz:rZ};
+  c.el.style.left=(540+x-c.w/2)+'px';c.el.style.top=(960+y-c.h/2)+'px';CAM.appendChild(c.el);
+  gsap.set(c.el,{z:0,rotationY:rY*1.4,rotationX:rX*1.2,rotationZ:rZ});heroes.push(c);});
+
+/* ---------- filler cards ---------- */
+const FILL=[{w:3.2,f:()=>({t:'portrait',img:pick(['team-a','team-b','team-c','team-d'])})},{w:2,f:()=>({t:'tile'})},{w:2.2,f:()=>({t:'icon',k:pick(Object.keys(ICON))})},
+ {w:1.4,f:()=>({t:'sign'})},{w:1.2,f:()=>({t:'leaf'})},{w:1,f:()=>({t:'poster'})},{w:.9,f:()=>({t:'book'})},{w:.7,f:()=>({t:'win'})}];
+const tot=FILL.reduce((a,b)=>a+b.w,0);
+function pickFill(){let r=R()*tot;for(const f of FILL){if((r-=f.w)<=0)return f.f();}return FILL[0].f();}
+const NF=125;let placed=0,guard=0;
+while(placed<NF&&guard++<5000){
+ const c=mkCard(pickFill());const sc=rr(.2,.46)*(c.spec.t==='win'?.8:1);
+ const fw=c.w*sc, fh=c.h*sc; const z=rr(-950,150);
+ const a=R()*Math.PI*2, rad=Math.sqrt(R()), x=rad*1500*Math.cos(a)*(R()<.5?1:1), y=rad*2100*Math.sin(a);
+ if(z>-120){let bad=false;for(const h of heroes){const hr=.62*Math.max(h.w,h.h)+80;const d=Math.hypot(x-h.x,y-h.y);if(d<hr+.5*Math.max(fw,fh)){bad=true;break;}}if(bad)continue;}
+ c.el.style.width=c.w+'px';c.el.style.height=c.h+'px';
+ c.el.style.left=(540+x-c.w/2)+'px';c.el.style.top=(960+y-c.h/2)+'px';
+ CAM.appendChild(c.el);
+ gsap.set(c.el,{z,scale:sc,rotationY:rr(-14,14),rotationX:rr(-10,10),rotationZ:rr(-9,9)});placed++;}
+CAM.querySelectorAll('.card,.iph').forEach(e=>e.style.backfaceVisibility='hidden');
+
+/* ---------- camera states ---------- */
+const heroScale=h=>Math.min(680/h.w,1350/h.h);
+const state=(h,drift=0)=>{const s=heroScale(h)*(1+drift);return{x:-h.x,y:-h.y,z:P*(1-1/s)}};
+const tl=gsap.timeline({paused:true,defaults:{ease:'none'}});
+const bgCol=c=>{tl.set(['#scene','#stage'],{backgroundColor:c},tl._bgT);};
+let t=0;const flips=[];
+function visit(k,hold,rotSign){
+ const h=heroes[k];const s0=state(h,0), s1=state(h,.07);
+ tl.set(CAM,{x:s0.x,y:s0.y,z:s0.z},t);   // overwritten by travel tweens below when needed
+ return h;}
+let cur=null;const seq=[];
+for(let act=0;act<2;act++)for(let k=0;k<NH;k++)seq.push({k,act});
+// first state
+const first=heroes[0];const f0=state(first);
+gsap.set(CAM,{x:f0.x,y:f0.y,z:f0.z});gsap.set(ROT,{rotationY:first.rot.ry,rotationX:first.rot.rx,rotationZ:first.rot.rz});
+let prev=null;const startT=[];
+seq.forEach((e,i)=>{
+ const h=heroes[e.k], hold=HOLD[e.k]*(1), a=state(h,0), b=state(h,.06);
+ if(prev){ // travel from prev to this hero
+   const pb=state(prev,.06), mid=Math.min(pb.z,a.z)-170;
+   tl.to(CAM,{x:a.x,y:a.y,duration:TR,ease:'power2.inOut'},t);
+   tl.to(CAM,{keyframes:[{z:mid,duration:TR*.5,ease:'power2.in'},{z:a.z,duration:TR*.5,ease:'power2.out'}]},t);
+   tl.to(ROT,{rotationY:h.rot.ry,rotationX:h.rot.rx,rotationZ:h.rot.rz,duration:TR,ease:'power2.inOut'},t);
+   t+=TR;}
+ startT.push(t);
+ // hold with slow push-in + tilt drift (parallax stays alive)
+ tl.to(CAM,{x:b.x,y:b.y,z:b.z,duration:hold,ease:'none'},t);
+ tl.to(ROT,{rotationY:h.rot.ry*-.6,rotationZ:h.rot.rz*.5,duration:hold,ease:'none'},t);
+ // iPhone scroll while it is the hero
+ if(h.spec.t==='phone'&&h.el._scroll)tl.fromTo(h.el._scroll.img,{y:0},{y:-h.el._scroll.max*.35,duration:hold+TR,ease:'power1.inOut'},t-TR*.5);
+ t+=hold;prev=h;
+});
+// background flips on the green tile (white → black → white)
+const tileIdx=NH-1;
+const flipA=startT[tileIdx]+.32, flipB=startT[NH+tileIdx]+.28;
+tl.set(['#scene','#stage'],{backgroundColor:'#0B0B0B'},flipA);
+tl.set(['#scene','#stage'],{backgroundColor:'#F5F5F5'},flipB);
+tl.set('#name',{color:'#0B0B0B'},0);
+// finale: other cards fall away, tile + name remain
+const END=startT[NH+tileIdx];
+const others=[...CAM.children].filter(e=>e!==heroes[tileIdx].el);
+tl.to(others,{opacity:0,duration:.35,ease:'power2.in'},flipB+.25);
+const sFin=Math.min(540/heroes[tileIdx].w);
+const fin=state(heroes[tileIdx],0);fin.z=P*(1-1/(sFin*1.0)); // tile ~540px wide
+tl.to(CAM,{x:fin.x,y:fin.y-110/ sFin,z:fin.z,duration:.55,ease:'power2.inOut'},flipB+.25);
+tl.to(ROT,{rotationY:0,rotationX:0,rotationZ:0,duration:.55,ease:'power2.inOut'},flipB+.25);
+tl.to(heroes[tileIdx].el,{rotationX:0,rotationY:0,rotationZ:0,duration:.55,ease:'power2.inOut'},flipB+.25);
+tl.to('#name',{opacity:1,duration:.4,ease:'power2.out'},flipB+.7);
+tl.fromTo('#name',{y:30},{y:0,duration:.5,ease:'power3.out'},flipB+.7);
+tl.to({},{duration:.01},flipB+2.4);
+window.TL=tl;
+console.log('duration',tl.duration(),'flipA',flipA,'flipB',flipB);
+</script></body></html>
