@@ -3,10 +3,10 @@
 <style>
 :root{--paper:#F5F5F5;--ink:#0B0B0B}
 body,#stage{background:var(--ink)}
-.scene{position:absolute;inset:0;visibility:hidden;perspective:1700px;perspective-origin:50% 45%;overflow:hidden}
+.scene{position:absolute;inset:0;visibility:hidden;overflow:hidden}
 .scene.l{background:var(--paper);color:var(--ink)} .scene.d{background:var(--ink);color:#fff}
-.world{position:absolute;inset:0;transform-style:preserve-3d}
-.cut{position:absolute;border-radius:26px;overflow:hidden;background:#fff;transform-style:preserve-3d;will-change:transform}
+.world{position:absolute;inset:0}
+.cut{position:absolute;border-radius:26px;overflow:hidden;background:#fff;will-change:transform}
 .d .cut{box-shadow:0 0 0 2px rgba(255,255,255,.07),0 40px 80px rgba(0,0,0,.6)}
 .l .cut{box-shadow:0 0 0 2px rgba(11,11,11,.05),0 36px 70px rgba(11,11,11,.22)}
 .cut img{display:block;width:100%}
@@ -20,7 +20,6 @@ body,#stage{background:var(--ink)}
 .pill i{position:absolute;right:-18px;bottom:-20px;width:46px;height:46px;border-radius:50%;background:var(--green);box-shadow:0 0 0 8px rgba(10,187,135,.25)}
 .sub{font-size:38px;font-weight:600;letter-spacing:-.01em;margin-top:30px}
 .d .sub{color:var(--grey)} .l .sub{color:#6b6b6b}
-.sticker{position:absolute;width:168px;height:168px;border-radius:26px;background:var(--green);display:flex;align-items:center;justify-content:center;box-shadow:0 24px 50px rgba(10,187,135,.35)}
 .big{font-size:150px;letter-spacing:-.05em;line-height:.95}
 .mask{overflow:hidden;display:block;padding:.08em 0}.mask>span{display:block}
 #E .cap{position:absolute;left:0;right:0;text-align:center}
@@ -30,25 +29,21 @@ body,#stage{background:var(--ink)}
 <div class="scene d" id="C"><div class="world" id="wC"></div><div class="tag" id="tC" style="top:250px;z-index:50"><span class="pill">Medis<i></i></span><div class="sub">Платформа для медичної лабораторії</div></div></div>
 <div class="scene l" id="D"><div class="world" id="wD"></div><div class="tag" id="tD" style="top:250px;z-index:50"><span class="pill">Вогонь Кебаб<i></i></span><div class="sub">Сайт із меню та замовленням</div></div></div>
 <div class="scene d" id="E"><div class="world" id="wE"></div>
-  <div class="cap" style="top:560px"><div id="lg" style="display:flex;justify-content:center"></div></div>
-  <div class="cap" style="top:800px"><div class="big mask"><span id="e1">Swipex</span></div></div>
-  <div class="cap" style="top:1010px;font-size:60px;letter-spacing:-.03em;line-height:1.12"><span class="mask"><span class="e2">Задумай ідею.</span></span><span class="mask"><span class="e2" style="color:var(--green)">Ми зробимо продукт.</span></span></div>
-  <div class="cap" id="e3" style="top:1290px;font-size:38px;font-weight:400;color:var(--grey);line-height:1.4">Веб- та мобільна розробка,<br>що приносить результат</div>
-  <div class="cap" id="e4" style="top:1450px"><span class="pill" style="font-size:50px;padding:22px 48px">Підписуйся&nbsp;&nbsp;<span style="color:var(--green)">@swipex.ua</span><i></i></span></div>
+  <div class="cap" style="top:640px"><div id="lg" style="display:flex;justify-content:center"></div></div>
+  <div class="cap" style="top:900px"><div class="big mask"><span id="e1">Swipex</span></div></div>
 </div>
 </div>
 <script src="../vendor/gsap.min.js"></script><script src="../logo.js"></script>
 <script>
 document.getElementById('lg').innerHTML=logoSVG(210,false);
 const AS={'wp-profile':[370,350],'wp-comp':[370,235],'wp-news':[370,360],'medis-title':[760,130],'medis-price':[380,320],'medis-list':[690,360],'medis-video':[690,410],'vohen-card':[492,160],'vohen-menu':[240,580],'vohen-mobile':[390,844],'vohen-modal':[392,845],'vohen-desktop':[1440,1024]};
-const dots='<svg width="110" height="110" viewBox="0 0 110 110"><g fill="#0B0B0B"><circle cx="20" cy="22" r="6"/><circle cx="55" cy="18" r="9"/><circle cx="90" cy="26" r="12"/><circle cx="24" cy="58" r="10"/><circle cx="58" cy="56" r="15"/><circle cx="92" cy="64" r="7"/><circle cx="22" cy="92" r="13"/><circle cx="56" cy="92" r="6"/><circle cx="90" cy="94" r="10"/></g></svg>';
 function add(w,o){const el=document.createElement('div');el.className='cut';el.style.cssText=`left:${o.x}px;top:${o.y}px;width:${o.w}px;`;
   if(o.phone){el.classList.add('phone');const h=o.h;el.style.height=h+'px';el.innerHTML=`<div class="in"><img src="../assets/${o.img}.png" style="width:100%;${o.scroll?'':'height:100%;object-fit:cover'}"></div>`;}
   else if(o.win){el.classList.add('win');el.style.height=o.h+'px';el.innerHTML=`<div class="in"><img src="../assets/${o.img}.png" style="width:100%"></div>`;}
   else{const [iw,ih]=AS[o.img];el.style.height=(o.w*ih/iw)+'px';el.innerHTML=`<img src="../assets/${o.img}.png">`;}
   el.dataset.rot=o.rot||0;el.style.zIndex=o.z||10;el.style.transform=`rotate(${o.rot||0}deg)`;document.getElementById(w).appendChild(el);return el;}
-function sticker(w,x,y,rot){const s=document.createElement('div');s.className='sticker';s.style.cssText=`left:${x}px;top:${y}px;z-index:30;transform:rotate(${rot}deg)`;s.innerHTML=dots;document.getElementById(w).appendChild(s);return s;}
 
+gsap.set('.cut',{transformPerspective:1700});
 const tl=gsap.timeline({paused:true,defaults:{ease:'power4.out'}});
 const show=(sel,a,b)=>{tl.set(sel,{visibility:'visible'},a);if(b!=null)tl.set(sel,{visibility:'hidden'},b)};
 const enter=(els,at,st=.09)=>tl.fromTo(els,{y:'+=420',rotateX:-38,z:-300,opacity:0},{y:'-=420',rotateX:0,z:0,opacity:1,duration:1,stagger:st,ease:'power4.out'},at);
@@ -69,11 +64,9 @@ const A=[
  add('wA',{img:'vohen-menu',x:420,y:1440,w:210,rot:-8,z:4}),
  add('wA',{img:'medis-title',x:250,y:200,w:600,rot:2,z:3}),
 ];
-const sA=sticker('wA',820,480,12), sA2=sticker('wA',80,1000,-14);
 tl.fromTo('#pillA',{scale:0},{scale:1,duration:.7,ease:'back.out(2.2)'},.1);
 tl.fromTo('#pillA i',{scale:0},{scale:1,duration:.8,ease:'elastic.out(1,.4)'},.45);
 A.forEach((e,i)=>tl.fromTo(e,{x:(540-parseFloat(e.style.left)-parseFloat(e.style.width)/2),y:(960-parseFloat(e.style.top)-parseFloat(e.style.height)/2),scale:.05,opacity:0,rotate:0},{x:0,y:0,scale:1,opacity:1,rotate:parseFloat(e.dataset.rot),duration:1.0,ease:'back.out(1.35)'},.35+i*.07));
-tl.fromTo([sA,sA2],{scale:0,rotate:-90},{scale:1,rotate:i=>0,duration:.7,ease:'back.out(2)',stagger:.1},.9);
 drift(A,1.5,1.8);
 tl.to('#A .world',{scale:1.9,opacity:0,duration:.4,ease:'power3.in'},A_END-.4);
 
@@ -85,13 +78,11 @@ const B=[bPhone,
  add('wB',{img:'wp-news',x:700,y:720,w:340,rot:6,z:26}),
  add('wB',{img:'wp-comp',x:50,y:1260,w:430,rot:-4,z:27}),
 ];
-const sB=sticker('wB',810,470,10);
 const imgB=bPhone.querySelector('img'); const sh=480-26;
 tl.fromTo(imgB,{y:0},{y:-(2402*sh/390-1010+26)*0.62,duration:3.2,ease:'power1.inOut'},TB+.5);
 tagIn('#tB',TB+.05);
 enter(B,TB+.1,.12);
 tl.fromTo(bPhone,{rotateY:-14},{rotateY:8,duration:3.4,ease:'sine.inOut'},TB+.1);
-tl.fromTo(sB,{scale:0,rotate:-80},{scale:1,rotate:10,duration:.6,ease:'back.out(2)'},TB+.8);
 drift(B.slice(1),TB+1.2,2);
 leave(['#B .world','#tB'],B_END-.35);
 
@@ -103,13 +94,11 @@ const C=[cDesk,
  add('wC',{img:'medis-list',x:30,y:1280,w:600,rot:-4,z:26}),
  add('wC',{img:'medis-video',x:700,y:505,w:330,rot:7,z:24}),
 ];
-const sC=sticker('wC',60,470,-10);
 const imgC=cDesk.querySelector('img');
 tl.fromTo(imgC,{y:0},{y:-(3384*920/1440-660)*0.55,duration:3.0,ease:'power1.inOut'},TC+.5);
 tagIn('#tC',TC+.05);
 enter(C,TC+.1,.12);
 tl.fromTo(cDesk,{rotateX:10,rotateY:-12},{rotateX:2,rotateY:6,duration:3.4,ease:'sine.inOut'},TC+.1);
-tl.fromTo(sC,{scale:0,rotate:80},{scale:1,rotate:-10,duration:.6,ease:'back.out(2)'},TC+.8);
 drift(C.slice(1),TC+1.2,2);
 leave(['#C .world','#tC'],C_END-.35);
 
@@ -121,12 +110,10 @@ const D=[dDesk,dMob,
  add('wD',{img:'vohen-modal',x:20,y:1020,w:330,rot:-6,z:27,phone:0}),
  add('wD',{img:'vohen-card',x:590,y:470,w:450,rot:6,z:24}),
 ];
-const sD=sticker('wD',850,1560,-12);
 tagIn('#tD',TD+.05);
 enter(D,TD+.1,.12);
 tl.fromTo(dDesk,{rotateX:8,rotateY:10},{rotateX:0,rotateY:-6,duration:3.4,ease:'sine.inOut'},TD+.1);
 tl.fromTo(dDesk.querySelector('img'),{scale:1,transformOrigin:'30% 30%'},{scale:1.12,duration:3.2,ease:'sine.inOut'},TD+.4);
-tl.fromTo(sD,{scale:0,rotate:80},{scale:1,rotate:-12,duration:.6,ease:'back.out(2)'},TD+.8);
 drift(D.slice(1),TD+1.2,2);
 leave(['#D .world','#tD'],D_END-.35);
 
@@ -134,10 +121,6 @@ leave(['#D .world','#tD'],D_END-.35);
 const TE=14.0; show('#E',TE);
 tl.fromTo('#lg svg',{scale:0,rotate:-120,opacity:0},{scale:1,rotate:0,opacity:1,duration:.9,ease:'back.out(1.8)'},TE+.1);
 tl.fromTo('#e1',{yPercent:115},{yPercent:0,duration:.7},TE+.45);
-tl.fromTo('.e2',{yPercent:115},{yPercent:0,duration:.7,stagger:.12},TE+.8);
-tl.fromTo('#e3',{opacity:0,y:30},{opacity:1,y:0,duration:.6},TE+1.3);
-tl.fromTo('#e4',{opacity:0,scale:.8,y:30},{opacity:1,scale:1,y:0,duration:.7,ease:'back.out(1.6)'},TE+1.6);
-tl.fromTo('#e4 i',{scale:0},{scale:1,duration:.8,ease:'elastic.out(1,.4)'},TE+2.0);
-tl.to({},{duration:.01},TE+3.6);
+tl.to({},{duration:.01},TE+2.8);
 window.TL=tl;
 </script></body></html>
