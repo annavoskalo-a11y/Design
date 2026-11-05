@@ -8,7 +8,7 @@ body{width:1080px;height:1920px;overflow:hidden;font-family:var(--font);backgrou
 .ch{display:inline-block}
 #bar{position:absolute;left:100px;right:100px;top:250px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:30px;letter-spacing:.2px;opacity:.7}
 #bar .l{display:flex;align-items:center;gap:14px}
-#title{position:absolute;left:100px;top:350px;font-weight:800;font-size:128px;letter-spacing:-4px;color:var(--dark)}
+#title{position:absolute;left:100px;top:350px;font-weight:800;font-size:102px;letter-spacing:-3px;color:var(--dark)}
 #cv{position:absolute;left:140px;top:640px}
 #foot{position:absolute;left:100px;right:100px;top:1500px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:28px;opacity:.7}
 </style>
@@ -23,7 +23,7 @@ const clamp=x=>Math.min(1,Math.max(0,x)),expo=x=>{x=clamp(x);return x>=1?1:1-Mat
 const lerp=(a,b,x)=>a+(b-a)*x;
 function mk(root,lines){root.innerHTML='';return lines.map(txt=>{const ln=document.createElement('div');ln.className='ln';[...txt].forEach(c=>{const s=document.createElement('span');s.className='ch';s.textContent=c==' '?' ':c;ln.appendChild(s)});root.appendChild(ln);return ln})}
 function chars(ln,tin,t,dur=.7,stag=.035,tout=999){[...ln.children].forEach((c,i)=>{const p=expo((t-tin-i*stag)/dur),q=eio((t-tout-i*stag)/.5);c.style.transform='translateY('+((1-p)*118-q*118)+'%)'})}
-const TL=mk($('title'),['Рідке скло','у русі']);
+const TL=mk($('title'),['Кожна деталь','на своєму місці']);
 const WM=mk($('wm'),['Swipex'])[0];
 // ---- лого ----
 const LP=[...document.querySelectorAll('#bar svg path')].map(p=>p.getAttribute('d'));
