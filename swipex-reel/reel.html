@@ -1,7 +1,7 @@
 <!doctype html><meta charset="utf-8">
 <style>
-/* ===== ПЛЕЙСХОЛДЕРИ БРЕНДУ — замінити на реальні кольори/шрифт/лого SwipeX ===== */
-:root{--accent:#14B85A;--dark:#0B0B0F;--light:#fff;--font:'Inter Display','Inter',sans-serif}
+/* Кольори бренду Swipex. Шрифт — тимчасовий (Inter Black), справжній шрифт бренду не надано. */
+:root{--accent:#0ABB87;--dark:#1E1E2D;--light:#F5F5F5;--font:'Inter Display','Inter',sans-serif}
 *{margin:0;box-sizing:border-box}
 body{width:1080px;height:1920px;overflow:hidden;font-family:var(--font);font-weight:900}
 #bg{position:absolute;inset:0}
@@ -9,16 +9,16 @@ body{width:1080px;height:1920px;overflow:hidden;font-family:var(--font);font-wei
 #line{position:absolute;left:540px;top:0;width:6px;margin-left:-3px;display:none}
 #dot{position:absolute;width:44px;height:44px;border-radius:50%;margin:-22px 0 0 -22px;display:none}
 #stack{position:absolute;left:0;right:0;top:0;display:none}
-#stack div{height:150px;line-height:150px;font-size:150px;text-align:center;color:#fff;letter-spacing:-4px}
+#stack div{height:150px;line-height:150px;font-size:150px;text-align:center;color:var(--light);letter-spacing:-4px}
 #stack .o{display:inline-block}
 </style>
 <div id="bg"></div><div id="line"></div><div id="dot"></div>
-<div id="t1" class="c" style="font-size:230px;color:#fff;letter-spacing:-6px"></div>
+<div id="t1" class="c" style="font-size:230px;color:var(--light);letter-spacing:-6px"></div>
 <div id="t2" class="c" style="top:760px;font-size:150px;letter-spacing:-5px"></div>
-<div id="w" class="c" style="top:880px;font-size:170px;color:#fff;letter-spacing:-5px"></div>
+<div id="w" class="c" style="top:880px;font-size:170px;color:var(--light);letter-spacing:-5px"></div>
 <div id="stack"></div>
-<div id="logo" class="c" style="top:760px;font-size:210px;color:var(--dark);letter-spacing:-8px">SwipeX</div>
-<div id="sub" class="c" style="top:1030px;font-size:50px;font-weight:700;color:var(--dark)">digital-продукти · дизайн · розробка</div>
+<div id="logo" class="c" style="top:560px"><svg width="300" viewBox="0 0 65 61" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto"><path d="M63.3284 10.5327C65.5298 12.6545 65.5706 16.1122 63.3691 18.2339L54.074 27.271C51.8725 29.3928 48.2849 29.4321 46.0834 27.3103L36.7067 18.3518C36.7067 18.3518 36.666 18.3518 36.666 18.3125C34.1383 16.1907 30.8361 16.23 28.3085 18.3911L19.0541 27.3889C16.8526 29.5107 13.265 29.5499 11.0635 27.4282L1.68682 18.4697C-0.555432 16.3479 -0.555432 12.8902 1.64605 10.7685L11.0377 1.59131C13.2392 -0.530441 16.5628 -0.530436 18.805 1.59132L28.3492 10.6506C31.0807 12.9295 33.323 13.0867 36.7067 10.6506L46.0019 1.6135C48.2034 -0.508252 51.791 -0.547544 54.0332 1.57421L63.3284 10.5327Z" fill="#1E1E2D"/><path d="M61.4208 50.3074L52.4204 59.3822C50.2887 61.5128 46.8148 61.5522 44.6831 59.4216L35.6037 50.4258C33.472 48.2952 33.472 44.8231 35.5643 42.6926L44.5647 33.6178C46.6964 31.4872 50.1703 31.4478 52.302 33.5784L61.3814 42.5742C63.513 44.6653 63.5525 48.1769 61.4208 50.3074Z" fill="#0ABB87"/></svg><div style="font-size:190px;letter-spacing:-7px;color:var(--dark);margin-top:50px">Swipex</div></div>
+<div id="sub" class="c" style="top:1130px;font-size:50px;font-weight:700;color:var(--dark)">digital-продукти · дизайн · розробка</div>
 <script>
 const $=id=>document.getElementById(id);
 const words=["за кожним","свайпом","стоїть","чиясь"];
@@ -40,7 +40,7 @@ function render(t){
   pend(540,520+ease(t/0.6)*210,D)}
  else if(t<2.8){ // два рядки
   const el=$('t2');el.style.display='block';
-  el.innerHTML='<span style="color:#fff">ти робиш це</span><br><span style="color:'+D+'">щодня</span>';
+  el.innerHTML='<span style="color:var(--light)">ти робиш це</span><br><span style="color:'+D+'">щодня</span>';
   el.style.transform='scale('+(0.92+0.08*ease((t-1.2)/0.25))+')';
   pend(540,700+Math.sin((t-1.2)*4)*5,D)}
  else if(t<4.8){ // швидкі слова
@@ -49,20 +49,20 @@ function render(t){
   el.style.transform='scale('+(0.94+0.06*ease(k/0.25))+')'}
  else if(t<6.6){ // стопка «РОБОТА»
   bg=D;st.style.display='block';st.style.top=(960-75-4*150)+'px';st.style.transform='none';
-  O.forEach((o,i)=>{o.style.color='#fff';o.style.transform='none'});
+  O.forEach((o,i)=>{o.style.color='var(--light)';o.style.transform='none'});
   const R=O[4].getBoundingClientRect(),ox=R.left+R.width/2,oy=R.top+R.height/2;
   const k=clamp((t-5.1)/0.8);
-  if(k<1&&t>5.1)pend(ox,-20+(oy+20)*ease(k),'#fff');
+  if(k<1&&t>5.1)pend(ox,-20+(oy+20)*ease(k),'var(--light)');
   else if(k>=1){const p=clamp((t-5.9)/0.25);O[4].style.color='var(--accent)';
    O[4].style.transform='scale('+(1+0.35*Math.sin(p*Math.PI))+')'}}
  else if(t<7.1){ // скрол-розмиття вгору
   const k=(t-6.6)/0.5;st.style.display='block';
   st.style.top=(960-75-4*150-ease(k)*1700)+'px';st.style.transform='none';
   st.style.filter='blur('+(Math.sin(clamp(k)*Math.PI)*26)+'px)';
-  O.forEach(o=>{o.style.color='#fff';o.style.transform='none'});O[4].style.color='var(--accent)';
-  bg=k>0.5?'var(--accent)':D}
+  O.forEach(o=>{o.style.color='var(--light)';o.style.transform='none'});O[4].style.color='var(--accent)';
+  bg=k>0.5?'var(--light)':D}
  else{ // лого
-  const k=ease((t-7.1)/0.5);
+  bg='var(--light)';const k=ease((t-7.1)/0.5);
   const l=$('logo');l.style.display='block';l.style.transform='scale('+(0.6+0.4*k)+')';l.style.opacity=k;
   const s=$('sub');s.style.display='block';s.style.opacity=ease((t-7.5)/0.4)}
  $('bg').style.background=bg;
