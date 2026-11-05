@@ -9,7 +9,7 @@ body{width:1080px;height:1920px;overflow:hidden;font-family:var(--font);font-wei
 #line{position:absolute;left:540px;top:0;width:6px;margin-left:-3px;display:none}
 #dot{position:absolute;width:44px;height:44px;border-radius:50%;margin:-22px 0 0 -22px;display:none}
 #stack{position:absolute;left:0;right:0;top:0;display:none}
-#stack div{height:150px;line-height:150px;font-size:124px;text-align:center;color:var(--light);letter-spacing:-4px}
+#stack div{height:150px;line-height:150px;font-size:150px;text-align:center;color:var(--light);letter-spacing:-4px}
 #stack .o{display:inline-block}
 </style>
 <div id="bg"></div><div id="line"></div><div id="dot"></div>
@@ -21,7 +21,7 @@ body{width:1080px;height:1920px;overflow:hidden;font-family:var(--font);font-wei
 <script>
 const $=id=>document.getElementById(id);
 const words=["а хтось","думав","над кожним","рухом"];
-const st=$('stack');for(let i=0;i<9;i++){const d=document.createElement('div');d.innerHTML='ПР<span class="o">О</span>ДУМАНО';st.appendChild(d)}
+const st=$('stack');for(let i=0;i<9;i++){const d=document.createElement('div');d.innerHTML='К<span class="o">О</span>МАНДА';st.appendChild(d)}
 const clamp=x=>Math.min(1,Math.max(0,x)),ease=x=>1-Math.pow(1-clamp(x),3);
 const O=[...st.querySelectorAll('.o')];
 function pend(x,y,col){const d=$('dot'),l=$('line');d.style.display=l.style.display='block';
